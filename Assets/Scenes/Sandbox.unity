@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 3ce3f07911e28e7478c8cc8a6ef856a9, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -93,8 +93,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: b14e4b11de57a0240973bbdd9fc8658a, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: b9954b73e63f5e74886649d0306e2177, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -248,6 +248,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87e1b1db4c25b6c4aba8b84b20e89d9a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 289403746}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87e1b1db4c25b6c4aba8b84b20e89d9a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 289403749}
   m_SourcePrefab: {fileID: 100100000, guid: 87e1b1db4c25b6c4aba8b84b20e89d9a, type: 3}
 --- !u!1 &289403743 stripped
 GameObject:
@@ -295,6 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 289403745}
   rb: {fileID: 289403747}
+  groundChecker: {fileID: 289403749}
   cinemachineCamera: {fileID: 563396145}
   inputReader: {fileID: 11400000, guid: 6e2efdd08a8417e41a2bc5d7459d2a1e, type: 2}
   moveSpeed: 300
@@ -347,9 +351,25 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.75
-  m_Height: 2
+  m_Height: 2.1
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &289403749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289403743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ce187c33be118c44a9a0feabeccdeb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundDistance: 0.04
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1001 &303741196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -494,8 +514,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000008655379, y: 0.000000018517241, z: 1.6027373e-16, w: 1}
-  m_LocalPosition: {x: 0.5935116, y: 1.7461033, z: -8.3873205}
+  m_LocalRotation: {x: 0.22975293, y: 0.00000004350763, z: -0.000000010270758, w: 0.973249}
+  m_LocalPosition: {x: 0.5935116, y: 6.7461033, z: -8.3873205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -728,8 +748,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563396139}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000008655379, y: 0.000000018517241, z: 2.7574496e-16, w: 1}
-  m_LocalPosition: {x: 0.5935116, y: 1.7461033, z: -8.3873205}
+  m_LocalRotation: {x: 0.2297529, y: 0.000000043507626, z: -0.000000010270757, w: 0.973249}
+  m_LocalPosition: {x: 0.5935116, y: 6.7461033, z: -8.3873205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -861,14 +881,14 @@ MonoBehaviour:
   Radius: 10
   Orbits:
     Top:
-      Radius: 8
-      Height: 8
+      Radius: 10
+      Height: 10
     Center:
       Radius: 10
-      Height: 3
+      Height: 8
     Bottom:
-      Radius: 6
-      Height: 0.1
+      Radius: 8
+      Height: 5
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
@@ -956,7 +976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca7de3aefa901374ba29464584a3109a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraRadius: 1
+  CameraRadius: 3
   Decollision:
     Enabled: 1
     ObstacleLayers:
@@ -986,7 +1006,7 @@ GameObject:
   - component: {fileID: 657265875}
   - component: {fileID: 657265874}
   - component: {fileID: 657265873}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Obstacle (1)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1143,7 +1163,7 @@ GameObject:
   - component: {fileID: 905141288}
   - component: {fileID: 905141287}
   - component: {fileID: 905141286}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Obstacle (2)
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1248,7 +1268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1405476184}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1286,7 +1306,7 @@ GameObject:
   - component: {fileID: 1549811366}
   - component: {fileID: 1549811365}
   - component: {fileID: 1549811364}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Obstacle
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1394,7 +1414,7 @@ GameObject:
   - component: {fileID: 2119836007}
   - component: {fileID: 2119836006}
   - component: {fileID: 2119836005}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
