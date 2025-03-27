@@ -304,6 +304,9 @@ MonoBehaviour:
   moveSpeed: 300
   rotationSpeed: 600
   smoothTime: 0.2
+  jumpForce: 10
+  jumpDuration: 0.05
+  jumpCooldown: 0
 --- !u!54 &289403747
 Rigidbody:
   m_ObjectHideFlags: 0
