@@ -238,10 +238,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87e1b1db4c25b6c4aba8b84b20e89d9a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 289403745}
+      addedObject: {fileID: 289403748}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87e1b1db4c25b6c4aba8b84b20e89d9a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 289403747}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87e1b1db4c25b6c4aba8b84b20e89d9a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 289403745}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87e1b1db4c25b6c4aba8b84b20e89d9a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 289403746}
@@ -290,15 +293,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e361654e77f1e1849a0e85a8c960ce04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 289403747}
   animator: {fileID: 289403745}
+  rb: {fileID: 289403747}
   cinemachineCamera: {fileID: 563396145}
   inputReader: {fileID: 11400000, guid: 6e2efdd08a8417e41a2bc5d7459d2a1e, type: 2}
-  moveSpeed: 8
-  rotationSpeed: 15
+  moveSpeed: 300
+  rotationSpeed: 600
   smoothTime: 0.2
---- !u!143 &289403747
-CharacterController:
+--- !u!54 &289403747
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289403743}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &289403748
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -312,15 +342,13 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 2
+  m_Radius: 0.75
   m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &303741196
 PrefabInstance:
@@ -1103,7 +1131,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 6e2efdd08a8417e41a2bc5d7459d2a1e, type: 2}
   cinemachineCamera: {fileID: 563396145}
-  speedMultiplier: 1
 --- !u!1 &905141285
 GameObject:
   m_ObjectHideFlags: 0

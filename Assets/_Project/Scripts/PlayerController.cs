@@ -8,20 +8,23 @@ namespace CannonMonke
     public class PlayerController : ValidatedMonoBehaviour
     {
         [Header("References")]
-        [SerializeField, Self] CharacterController characterController;
         [SerializeField, Self] Animator animator;
+        [SerializeField, Self] Rigidbody rb;
+        [SerializeField, Self] GroundChecker groundChecker;
         [SerializeField, Anywhere] CinemachineCamera cinemachineCamera;
         [SerializeField, Anywhere] InputReader inputReader;
 
         [Header("Settings")]
-        [SerializeField] float moveSpeed = 8f;
-        [SerializeField] float rotationSpeed = 15f;
+        [SerializeField] float moveSpeed = 300f;
+        [SerializeField] float rotationSpeed = 600f;
         [SerializeField] float smoothTime = 0.2f;
 
         const float Zerof = 0f;
 
         float velocity;
         float currentSpeed;
+
+        Vector3 movement;
 
         Transform mainCamera;
 
@@ -31,18 +34,34 @@ namespace CannonMonke
         void Awake()
         {
             mainCamera = Camera.main.transform;
+
             cinemachineCamera.Follow = transform;
             cinemachineCamera.LookAt = transform;
+
             // Invoke event when transform is teleported, adjusting cinemachine cam position accordingly
-            cinemachineCamera.OnTargetObjectWarped(transform, transform.position - cinemachineCamera.transform.position - Vector3.forward);
+            cinemachineCamera.OnTargetObjectWarped(
+                transform, 
+                transform.position - cinemachineCamera.transform.position - Vector3.forward);
+
+            rb.freezeRotation = true;
         }
 
         void Start() => inputReader.EnablePlayerActions();
 
         void Update()
         {
-            HandleMovement();
+            movement = new (
+                inputReader.Direction.x, 
+                0f, 
+                inputReader.Direction.y);
+
             UpdateAnimation();
+        }
+
+        void FixedUpdate()
+        {
+            // handlejump()
+            HandleMovement();
         }
 
         void UpdateAnimation()
@@ -52,19 +71,29 @@ namespace CannonMonke
 
         void HandleMovement()
         {
-            var movementDirection = new Vector3(inputReader.Direction.x, 0f, inputReader.Direction.y).normalized;
+            var movementDirection = new Vector3(
+                inputReader.Direction.x, 
+                0f, 
+                inputReader.Direction.y).normalized;
+
             // Rotate movement direction to match camera rotation
-            var adjustedDirection = Quaternion.AngleAxis(mainCamera.eulerAngles.y, Vector3.up) * movementDirection;
+            var adjustedDirection = Quaternion.AngleAxis(mainCamera.eulerAngles.y, Vector3.up) * movement;
             
             if (adjustedDirection.magnitude > Zerof)
             {
                 HandleRotation(adjustedDirection);
-                HandleCharacterController(adjustedDirection);
+                HandleHorizontalMovement(adjustedDirection);
                 SmoothDamp(adjustedDirection.magnitude);
             }
             else
             {
                 SmoothDamp(Zerof);
+
+                // Reset horizontal velocity for a snappy stop
+                rb.linearVelocity = new(
+                    Zerof, 
+                    rb.linearVelocity.y, 
+                    Zerof);
             }
         }
 
@@ -72,20 +101,31 @@ namespace CannonMonke
         {
             // Adjust rotation to match movement direction
             var targetRotation = Quaternion.LookRotation(adjustedDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            transform.LookAt(transform.position + adjustedDirection);
+
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation, 
+                targetRotation, 
+                rotationSpeed * Time.deltaTime);
         }
 
-        void HandleCharacterController(Vector3 adjustedDirection)
+        void HandleHorizontalMovement(Vector3 adjustedDirection)
         {
             // Move the player
-            var adjustedMovement = adjustedDirection * (moveSpeed * Time.deltaTime);
-            characterController.Move(adjustedMovement);
+            Vector3 velocity = adjustedDirection * moveSpeed * Time.fixedDeltaTime;
+
+            rb.linearVelocity = new(
+                velocity.x, 
+                rb.linearVelocity.y, 
+                velocity.z);
         }
 
         void SmoothDamp(float value)
         {
-            currentSpeed = Mathf.SmoothDamp(currentSpeed, value, ref velocity, smoothTime);
+            currentSpeed = Mathf.SmoothDamp(
+                currentSpeed, 
+                value, 
+                ref velocity, 
+                smoothTime);
         }
     }
 }

@@ -28,6 +28,11 @@ namespace CannonMonke
             inputActions.Enable();
         }
 
+        void OnDisable()
+        {
+            inputActions.Disable();
+        }
+
         public void EnablePlayerActions()
         {
             inputActions.Enable();

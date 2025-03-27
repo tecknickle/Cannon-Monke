@@ -100,11 +100,11 @@
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Behaviours\CinemachinePixelPerfect.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Components\CinemachineHardLookAt.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Deprecated\CinemachineSmoothPath.cs" />
-    <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Core\LookaheadSettings.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Components\CinemachineFollow.cs" />
+    <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Core\LookaheadSettings.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Deprecated\LegacyLensSettings.cs" />
-    <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Behaviours\CinemachineCamera.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\PostProcessing\CinemachinePostProcessing.cs" />
+    <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Behaviours\CinemachineCamera.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Helpers\CinemachineCameraEvents.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\Core\GaussianFilter.cs" />
     <Compile Include="Library\PackageCache\com.unity.cinemachine@624f919d8cdd\Runtime\ThirdParty\Clipper.Engine.cs" />
