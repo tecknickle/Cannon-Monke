@@ -32,20 +32,21 @@ namespace CannonMonke
             inputReader.DisableMouseControlCamera -= OnDisableMouseControlCamera;
         }
 
-        private void OnEnableMouseControlCamera()
+        private void Start()
         {
             // Lock cursor to center of the screen and hide it
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
 
+        private void OnEnableMouseControlCamera()
+        {
             StartCoroutine(OnDisableMouseForFrame());
         }
 
         IEnumerator OnDisableMouseForFrame()
         {
-            cameraMovementLock = true;
-            yield return new WaitForEndOfFrame();
-            cameraMovementLock = false;
+            yield return new WaitForEndOfFrame();  
         }
 
         private void OnLook(Vector2 cameraMovement, bool isDeviceMouse)
@@ -58,9 +59,7 @@ namespace CannonMonke
 
         private void OnDisableMouseControlCamera()
         {
-            // Unlock cursor and make it visible
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            // no op
         }
 
         

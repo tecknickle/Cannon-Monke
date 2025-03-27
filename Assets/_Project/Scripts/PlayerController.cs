@@ -22,9 +22,10 @@ namespace CannonMonke
         [SerializeField] float smoothTime = 0.2f;
 
         [Header("Jump Settings")]
-        [SerializeField] float jumpForce = 10f;
-        [SerializeField] float jumpDuration = 0.01f;
-        [SerializeField] float jumpCooldown = 0f;
+        [SerializeField] float jumpForce = 15f;
+        [SerializeField] float jumpDuration = 0.05f;
+        [SerializeField] float jumpCooldown = 1f;
+        [SerializeField] float gravityMultiplier = 3f;
 
         const float Zerof = 0f;
 
@@ -137,11 +138,14 @@ namespace CannonMonke
             if (!jumpTimer.IsRunning)
             {
                 // Gravity takes over
-                jumpVelocity += Physics.gravity.y * Time.fixedDeltaTime;
+                jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
             }
 
             // Apply velocity
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
+            rb.linearVelocity = new Vector3(
+                rb.linearVelocity.x, 
+                jumpVelocity, 
+                rb.linearVelocity.z);
         }
 
         void HandleMovement()
