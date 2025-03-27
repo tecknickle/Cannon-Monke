@@ -28,6 +28,11 @@ namespace CannonMonke
             inputActions.Enable();
         }
 
+        public void EnablePlayerActions()
+        {
+            inputActions.Enable();
+        }
+
         public void OnFire(InputAction.CallbackContext context)
         {
             // no op

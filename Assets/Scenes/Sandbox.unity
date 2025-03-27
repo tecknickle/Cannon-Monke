@@ -721,16 +721,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScanRecursively: 1
   SuppressInputWhileBlending: 1
-  IgnoreTimeScale: 0
+  IgnoreTimeScale: 1
   m_ControllerManager:
     Controllers:
     - Name: Look Orbit X
       Owner: {fileID: 563396144}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -8379503015026823624, guid: 088d5db553f5fd249a1d141a836a7025, type: 3}
         Gain: 1
-        LegacyInput: 
+        LegacyInput: Mouse X
         LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
@@ -741,9 +741,9 @@ MonoBehaviour:
       Owner: {fileID: 563396144}
       Enabled: 1
       Input:
-        InputAction: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -8379503015026823624, guid: 088d5db553f5fd249a1d141a836a7025, type: 3}
         Gain: -1
-        LegacyInput: 
+        LegacyInput: Mouse Y
         LegacyGain: 1
         CancelDeltaTime: 0
       InputValue: 0
@@ -754,7 +754,7 @@ MonoBehaviour:
       Owner: {fileID: 563396144}
       Enabled: 1
       Input:
-        InputAction: {fileID: 5082991133974614888, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
+        InputAction: {fileID: -8379503015026823624, guid: 088d5db553f5fd249a1d141a836a7025, type: 3}
         Gain: -1
         LegacyInput: 
         LegacyGain: 1
@@ -1063,6 +1063,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 841607251}
+  - component: {fileID: 841607252}
   m_Layer: 0
   m_Name: Camera System
   m_TagString: Untagged
@@ -1088,6 +1089,21 @@ Transform:
   - {fileID: 410087041}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &841607252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841607250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3dfd23ad300e84094da55056e3033f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: 6e2efdd08a8417e41a2bc5d7459d2a1e, type: 2}
+  cinemachineCamera: {fileID: 563396145}
+  speedMultiplier: 1
 --- !u!1 &905141285
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,7 +1206,7 @@ Transform:
   m_GameObject: {fileID: 905141285}
   serializedVersion: 2
   m_LocalRotation: {x: -0.512875, y: -0.6055749, z: -0.05413062, w: 0.6060596}
-  m_LocalPosition: {x: 0.5935118, y: -0.5, z: -5.94}
+  m_LocalPosition: {x: 6.42, y: -0.5, z: -5.94}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []

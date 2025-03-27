@@ -25,6 +25,9 @@ namespace CannonMonke
 
         Transform mainCamera;
 
+        // Animator parameters
+        static readonly int Speed = Animator.StringToHash("Speed");
+
         void Awake()
         {
             mainCamera = Camera.main.transform;
@@ -34,10 +37,17 @@ namespace CannonMonke
             cinemachineCamera.OnTargetObjectWarped(transform, transform.position - cinemachineCamera.transform.position - Vector3.forward);
         }
 
+        void Start() => inputReader.EnablePlayerActions();
+
         void Update()
         {
             HandleMovement();
-            //UpdateAnimation();
+            UpdateAnimation();
+        }
+
+        void UpdateAnimation()
+        {
+            animator.SetFloat(Speed, currentSpeed);
         }
 
         void HandleMovement()
