@@ -13,6 +13,7 @@ namespace CannonMonke
         public event UnityAction EnableMouseControlCamera = delegate {};
         public event UnityAction DisableMouseControlCamera = delegate {};
         public event UnityAction<bool> Jump = delegate {};
+        public event UnityAction<bool> Interact = delegate {};
 
         PlayerInputActions inputActions;
 
@@ -70,6 +71,19 @@ namespace CannonMonke
         public void OnRun(InputAction.CallbackContext context)
         {
             // no op
+        }
+
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    Interact.Invoke(true);
+                    break;
+                case InputActionPhase.Canceled:
+                    Interact.Invoke(false);
+                    break;
+            }
         }
     }
 }

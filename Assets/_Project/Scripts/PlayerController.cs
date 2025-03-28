@@ -42,7 +42,6 @@ namespace CannonMonke
         CountdownTimer jumpTimer;
         CountdownTimer jumpCooldownTimer;
         
-
         // Animator parameters
         static readonly int Speed = Animator.StringToHash("Speed");
 
