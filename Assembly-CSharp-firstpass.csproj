@@ -548,16 +548,16 @@
       <HintPath>Library\PackageCache\com.unity.ext.nunit@60ef35ffd3cd\net40\unity-custom\nunit.framework.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="DOTween">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1b53f46e931b\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil@d6f9955a5d5f\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DOTween">
-      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="netstandard">
@@ -1082,6 +1082,10 @@
       <Project>{3FC7FBE4-5C3F-B3CA-1025-B1907BA773B8}</Project>
       <Name>Unity.Cinemachine.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="CFXRDemo.csproj">
+      <Project>{A5EF7087-E625-6449-6EDA-9CD38323C966}</Project>
+      <Name>CFXRDemo</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.Shared.csproj">
       <Project>{63B29053-E1D6-D906-B64D-EF3ACD7FDDF5}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime.Shared</Name>
@@ -1142,6 +1146,14 @@
       <Project>{F25B676F-4710-1B74-0DAE-1FFE9B6C99E7}</Project>
       <Name>PPv2URPConverters</Name>
     </ProjectReference>
+    <ProjectReference Include="CFXR.WelcomeScreen.csproj">
+      <Project>{AD66804F-9FDF-565E-5445-ABBC2D395DAD}</Project>
+      <Name>CFXR.WelcomeScreen</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXREditor.csproj">
+      <Project>{DF6FE911-5BF4-819A-5CDE-176BA5A01665}</Project>
+      <Name>CFXREditor</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Rendering.LightTransport.Editor.csproj">
       <Project>{2ECC1CA3-B475-EA02-9311-5896E750C54D}</Project>
       <Name>Unity.Rendering.LightTransport.Editor</Name>
@@ -1170,6 +1182,10 @@
       <Project>{1158296D-1FC0-C38D-E35E-AA930FB646D5}</Project>
       <Name>Unity.Collections.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="CFXRRuntime.csproj">
+      <Project>{F11119D0-D79D-822C-D1E1-677A1AF5F5B1}</Project>
+      <Name>CFXRRuntime</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.csproj">
       <Project>{5AF750B1-210F-F991-72A1-17E76BEFA77D}</Project>
       <Name>Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary</Name>
@@ -1190,6 +1206,10 @@
       <Project>{4C01E929-33AD-BA39-2694-350B20FC473D}</Project>
       <Name>Unity.AI.Navigation.Updater</Name>
     </ProjectReference>
+    <ProjectReference Include="KinoBloom.Runtime.csproj">
+      <Project>{EBAF0DB6-023C-66F7-F3D3-0B95B7FE9A26}</Project>
+      <Name>KinoBloom.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.Flow.Editor.csproj">
       <Project>{0D98931E-740D-3188-4F80-A4EA56DE915B}</Project>
       <Name>Unity.VisualScripting.Flow.Editor</Name>
@@ -1197,6 +1217,10 @@
     <ProjectReference Include="Unity.TextMeshPro.csproj">
       <Project>{6B4379AC-0FC2-C5CA-CBA3-77535D4CA7AC}</Project>
       <Name>Unity.TextMeshPro</Name>
+    </ProjectReference>
+    <ProjectReference Include="ToonyColorsPro.Demo.Editor.csproj">
+      <Project>{5259BFBC-0794-467C-5D40-F30B38F41179}</Project>
+      <Name>ToonyColorsPro.Demo.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VisualScripting.SettingsProvider.Editor.csproj">
       <Project>{E880F8C9-809C-DCAB-D70D-F307B2A96618}</Project>
