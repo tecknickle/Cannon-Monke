@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -249,7 +253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 185814509}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Crates
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,6 +340,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
       propertyPath: m_Name
       value: Crate
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -534,10 +542,11 @@ MonoBehaviour:
   moveSpeed: 300
   rotationSpeed: 600
   smoothTime: 0.2
-  jumpForce: 10
+  jumpForce: 15
   jumpDuration: 0.05
   jumpCooldown: 0
   gravityMultiplier: 3
+  maxFallVelocity: -30
 --- !u!54 &289403747
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -603,7 +612,7 @@ MonoBehaviour:
   groundDistance: 0.04
   groundLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 72
 --- !u!1001 &303741196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1710,6 +1719,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1772,6 +1785,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
       propertyPath: m_Name
       value: Crate (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1993,6 +2010,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2140,6 +2161,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2260,6 +2285,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
       propertyPath: m_Name
       value: Crate (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2417,6 +2446,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
       propertyPath: m_Name
       value: Crate (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2763,6 +2796,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2884,6 +2921,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2974,6 +3015,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
       propertyPath: m_Name
       value: Crate (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3124,6 +3169,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3245,6 +3294,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3307,6 +3360,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
       propertyPath: m_Name
       value: Crate (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1ebab944b554af143b44ef26d8e72791, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

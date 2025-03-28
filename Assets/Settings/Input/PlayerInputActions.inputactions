@@ -33,19 +33,10 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "MouseControlCamera",
-                    "type": "Button",
-                    "id": "f7771a84-db1d-4415-9f27-2e3aec04a6cf",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Run",
                     "type": "Button",
                     "id": "33d00ec1-bad8-4d9b-87b7-83e652d0dd44",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -278,17 +269,6 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b1466427-4643-439e-9509-802a52ea6d20",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardOrGamepad",
-                    "action": "MouseControlCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

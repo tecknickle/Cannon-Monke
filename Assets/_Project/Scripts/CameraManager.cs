@@ -21,15 +21,11 @@ namespace CannonMonke
         void OnEnable()
         {
             inputReader.Look += OnLook;
-            inputReader.EnableMouseControlCamera += OnEnableMouseControlCamera;
-            inputReader.DisableMouseControlCamera += OnDisableMouseControlCamera;
         }
 
         void OnDisable()
         {
             inputReader.Look -= OnLook;
-            inputReader.EnableMouseControlCamera -= OnEnableMouseControlCamera;
-            inputReader.DisableMouseControlCamera -= OnDisableMouseControlCamera;
         }
 
         private void Start()
@@ -39,29 +35,12 @@ namespace CannonMonke
             Cursor.visible = false;
         }
 
-        private void OnEnableMouseControlCamera()
-        {
-            StartCoroutine(OnDisableMouseForFrame());
-        }
-
-        IEnumerator OnDisableMouseForFrame()
-        {
-            yield return new WaitForEndOfFrame();  
-        }
-
-        private void OnLook(Vector2 cameraMovement, bool isDeviceMouse)
+        private void OnLook(Vector2 cameraMovement)
         {
             if (cameraMovementLock) return;
 
             //cinemachineCamera.XAxis.InputAxisValue = cameraMovement.x * speedMultiplier;
             //cinemachineCamera.YAxis.InputAxisValue = cameraMovement.y * speedMultiplier;
         }
-
-        private void OnDisableMouseControlCamera()
-        {
-            // no op
-        }
-
-        
     }
 }

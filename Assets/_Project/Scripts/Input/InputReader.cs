@@ -9,7 +9,7 @@ namespace CannonMonke
     public class InputReader : ScriptableObject, IPlayerActions
     {
         public event UnityAction<Vector2> Move = delegate {};
-        public event UnityAction<Vector2, bool> Look = delegate {};
+        public event UnityAction<Vector2> Look = delegate {};
         public event UnityAction EnableMouseControlCamera = delegate {};
         public event UnityAction DisableMouseControlCamera = delegate {};
         public event UnityAction<bool> Jump = delegate {};
@@ -59,22 +59,7 @@ namespace CannonMonke
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            Look.Invoke(context.ReadValue<Vector2>(), isDeviceMouse(context));
-        }
-
-        bool isDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
-
-        public void OnMouseControlCamera(InputAction.CallbackContext context)
-        {
-            switch (context.phase)
-            {
-                case InputActionPhase.Started: 
-                    EnableMouseControlCamera.Invoke();
-                    break;
-                case InputActionPhase.Canceled:
-                    DisableMouseControlCamera.Invoke();
-                    break;
-            }
+            Look.Invoke(context.ReadValue<Vector2>());
         }
 
         public void OnMove(InputAction.CallbackContext context)

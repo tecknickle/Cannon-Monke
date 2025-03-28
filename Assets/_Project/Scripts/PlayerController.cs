@@ -24,8 +24,9 @@ namespace CannonMonke
         [Header("Jump Settings")]
         [SerializeField] float jumpForce = 15f;
         [SerializeField] float jumpDuration = 0.05f;
-        [SerializeField] float jumpCooldown = 1f;
+        [SerializeField] float jumpCooldown = 0f;
         [SerializeField] float gravityMultiplier = 3f;
+        [SerializeField] float maxFallVelocity = -30f;
 
         const float Zerof = 0f;
 
@@ -127,7 +128,7 @@ namespace CannonMonke
 
         void HandleJump()
         {
-            // If not jumping or grounded, keep jump velocity at 0
+            // If not jumping and grounded, keep jump velocity at 0
             if (!jumpTimer.IsRunning && groundChecker.isGrounded)
             {
                 jumpVelocity = Zerof;
@@ -139,6 +140,12 @@ namespace CannonMonke
             {
                 // Gravity takes over
                 jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
+                
+                // Player has a terminal velocity when falling
+                if (jumpVelocity < maxFallVelocity && !groundChecker.isGrounded)
+                {
+                    jumpVelocity = maxFallVelocity;
+                }
             }
 
             // Apply velocity
@@ -176,6 +183,17 @@ namespace CannonMonke
             }
         }
 
+        void HandleHorizontalMovement(Vector3 adjustedDirection)
+                {
+                    // Move the player
+                    Vector3 velocity = adjustedDirection * moveSpeed * Time.fixedDeltaTime;
+
+                    rb.linearVelocity = new(
+                        velocity.x, 
+                        rb.linearVelocity.y, 
+                        velocity.z);
+                }
+
         void HandleRotation(Vector3 adjustedDirection)
         {
             // Adjust rotation to match movement direction
@@ -185,17 +203,6 @@ namespace CannonMonke
                 transform.rotation, 
                 targetRotation, 
                 rotationSpeed * Time.deltaTime);
-        }
-
-        void HandleHorizontalMovement(Vector3 adjustedDirection)
-        {
-            // Move the player
-            Vector3 velocity = adjustedDirection * moveSpeed * Time.fixedDeltaTime;
-
-            rb.linearVelocity = new(
-                velocity.x, 
-                rb.linearVelocity.y, 
-                velocity.z);
         }
 
         void SmoothDamp(float value)
