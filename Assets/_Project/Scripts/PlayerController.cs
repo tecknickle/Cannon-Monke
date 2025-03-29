@@ -35,7 +35,7 @@ namespace CannonMonke
 
         float velocity;
         float currentSpeed;
-        float jumpVelocity;
+        float verticalVelocity;
 
         Vector3 movement;
 
@@ -67,7 +67,7 @@ namespace CannonMonke
             jumpCooldownTimer = new CountdownTimer(jumpCooldown);
             timers = new(2) { jumpTimer, jumpCooldownTimer };
 
-            jumpTimer.OnTimerStart += () => jumpVelocity = jumpForce;
+            jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
             jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
 
             // Setup Statemachine
@@ -164,7 +164,7 @@ namespace CannonMonke
             // If not jumping and grounded, keep jump velocity at 0
             if (!jumpTimer.IsRunning && groundChecker.isGrounded)
             {
-                jumpVelocity = Zerof;
+                verticalVelocity = Zerof;
                 return;
             }
 
@@ -172,19 +172,19 @@ namespace CannonMonke
             if (!groundChecker.isGrounded)
             {
                 // Gravity takes over
-                jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
+                verticalVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
                 
                 // Player has a terminal velocity when falling
-                if (jumpVelocity < maxFallVelocity)
+                if (verticalVelocity < maxFallVelocity)
                 {
-                    jumpVelocity = maxFallVelocity;
+                    verticalVelocity = maxFallVelocity;
                 }
             }
 
             // Apply velocity
             rb.linearVelocity = new Vector3(
                 rb.linearVelocity.x, 
-                jumpVelocity, 
+                verticalVelocity, 
                 rb.linearVelocity.z);
         }
 
@@ -217,15 +217,15 @@ namespace CannonMonke
         }
 
         void HandleHorizontalMovement(Vector3 adjustedDirection)
-                {
-                    // Move the player
-                    Vector3 velocity = adjustedDirection * moveSpeed * Time.fixedDeltaTime;
+            {
+                // Move the player
+                Vector3 velocity = adjustedDirection * moveSpeed * Time.fixedDeltaTime;
 
-                    rb.linearVelocity = new(
-                        velocity.x, 
-                        rb.linearVelocity.y, 
-                        velocity.z);
-                }
+                rb.linearVelocity = new(
+                    velocity.x, 
+                    rb.linearVelocity.y, 
+                    velocity.z);
+            }
 
         void HandleRotation(Vector3 adjustedDirection)
         {

@@ -550,7 +550,7 @@ MonoBehaviour:
   jumpCooldown: 0
   gravityMultiplier: 3
   maxFallVelocity: -30
-  minFallVelocity: -5
+  minFallVelocity: 0
 --- !u!54 &289403747
 Rigidbody:
   m_ObjectHideFlags: 0

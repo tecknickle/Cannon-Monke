@@ -11,9 +11,10 @@ namespace CannonMonke
     {
         [Header("References")]
         [SerializeField, Anywhere] InputReader inputReader;
-        [SerializeField, Anywhere] CinemachineCamera cinemachineCamera;
+        [SerializeField, Anywhere] CinemachineOrbitalFollow cinemachineCamera;
 
         [Header("Settings")]
+        [SerializeField, Range(0, 5)] float cameraSensitivity = 1f;
 
         bool cameraMovementLock;
 
@@ -34,9 +35,19 @@ namespace CannonMonke
             Cursor.visible = false;
         }
 
-        private void OnLook(Vector2 cameraMovement)
+        private void OnLook(Vector2 cameraMovement, bool isDeviceMouse)
         {
             if (cameraMovementLock) return;
+
+            // If device is mouse use fixedDeltaTime, else use deltaTime
+            float deviceMultiplier = isDeviceMouse ? Time.fixedDeltaTime : Time.deltaTime;
+
+            // Set camera axis values
+            cinemachineCamera.HorizontalAxis.Value += 
+                cameraMovement.x * cameraSensitivity * deviceMultiplier;
+
+            cinemachineCamera.VerticalAxis.Value -= 
+                cameraMovement.y * cameraSensitivity * deviceMultiplier;
         }
     }
 }
