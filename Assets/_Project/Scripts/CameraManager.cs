@@ -14,7 +14,6 @@ namespace CannonMonke
         [SerializeField, Anywhere] CinemachineCamera cinemachineCamera;
 
         [Header("Settings")]
-        //[SerializeField, Range(0.5f, 30f)] float speedMultiplier = 1.0f;
 
         bool cameraMovementLock;
 
@@ -38,9 +37,6 @@ namespace CannonMonke
         private void OnLook(Vector2 cameraMovement)
         {
             if (cameraMovementLock) return;
-
-            //cinemachineCamera.XAxis.InputAxisValue = cameraMovement.x * speedMultiplier;
-            //cinemachineCamera.YAxis.InputAxisValue = cameraMovement.y * speedMultiplier;
         }
     }
 }

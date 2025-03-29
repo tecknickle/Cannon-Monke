@@ -22,11 +22,12 @@ namespace CannonMonke
         [SerializeField] float smoothTime = 0.2f;
 
         [Header("Jump Settings")]
-        [SerializeField] float jumpForce = 15f;
-        [SerializeField] float jumpDuration = 0.05f;
+        [SerializeField] float jumpForce = 20f;
+        [SerializeField] float jumpDuration = 1f;
         [SerializeField] float jumpCooldown = 0f;
         [SerializeField] float gravityMultiplier = 3f;
         [SerializeField] float maxFallVelocity = -30f;
+        [SerializeField] float minFallVelocity = 0f;
 
         const float Zerof = 0f;
 
@@ -41,6 +42,8 @@ namespace CannonMonke
         List<Timer> timers;
         CountdownTimer jumpTimer;
         CountdownTimer jumpCooldownTimer;
+
+        StateMachine stateMachine;
         
         // Animator parameters
         static readonly int Speed = Animator.StringToHash("Speed");
@@ -66,7 +69,36 @@ namespace CannonMonke
 
             jumpTimer.OnTimerStart += () => jumpVelocity = jumpForce;
             jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
+
+            // Setup Statemachine
+            stateMachine = new StateMachine();
+
+            // Declare states
+            var locomotionState = new LocomotionState(this, animator);
+            var jumpState = new JumpState(this, animator);
+            var fallingState = new FallingState(this, animator);
+
+            // Define transitions
+            At(locomotionState, jumpState, 
+                new FuncPredicate(() => jumpTimer.IsRunning));
+
+            At(fallingState, locomotionState, 
+                new FuncPredicate(() => groundChecker.isGrounded));
+
+            Any(fallingState,
+                new FuncPredicate(() => !groundChecker.isGrounded
+                && rb.linearVelocity.y < minFallVelocity));
+
+            // Set initial state
+            stateMachine.SetState(locomotionState);
         }
+
+        void At(IState from, IState to, 
+            IPredicate condition) => stateMachine.AddTransition(from, to, condition);
+
+        void Any(IState to, 
+            IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
+
 
         void Start() => inputReader.EnablePlayerActions();
 
@@ -103,14 +135,15 @@ namespace CannonMonke
                 0f, 
                 inputReader.Direction.y);
 
+            stateMachine.Update();
+
             HandleTimers();
             UpdateAnimation();
         }
 
         void FixedUpdate()
         {
-            HandleMovement();
-            HandleJump();            
+            stateMachine.FixedUpdate();        
         }
 
         void UpdateAnimation()
@@ -126,7 +159,7 @@ namespace CannonMonke
             }
         }
 
-        void HandleJump()
+        public void HandleJump()
         {
             // If not jumping and grounded, keep jump velocity at 0
             if (!jumpTimer.IsRunning && groundChecker.isGrounded)
@@ -136,13 +169,13 @@ namespace CannonMonke
             }
 
             // If jumping or falling velocity
-            if (!jumpTimer.IsRunning)
+            if (!groundChecker.isGrounded)
             {
                 // Gravity takes over
                 jumpVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
                 
                 // Player has a terminal velocity when falling
-                if (jumpVelocity < maxFallVelocity && !groundChecker.isGrounded)
+                if (jumpVelocity < maxFallVelocity)
                 {
                     jumpVelocity = maxFallVelocity;
                 }
@@ -155,7 +188,7 @@ namespace CannonMonke
                 rb.linearVelocity.z);
         }
 
-        void HandleMovement()
+         public void HandleMovement()
         {
             var movementDirection = new Vector3(
                 inputReader.Direction.x, 

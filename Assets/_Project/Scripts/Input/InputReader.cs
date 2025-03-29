@@ -5,7 +5,7 @@ using static PlayerInputActions;
 
 namespace CannonMonke
 {
-    [CreateAssetMenu(fileName = "InputReader", menuName = "Scriptable Objects/InputReader")]
+    [CreateAssetMenu(fileName = "InputReader", menuName = "CannonMonke/InputReader")]
     public class InputReader : ScriptableObject, IPlayerActions
     {
         public event UnityAction<Vector2> Move = delegate {};
