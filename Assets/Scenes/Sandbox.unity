@@ -551,7 +551,7 @@ MonoBehaviour:
   gravityMultiplier: 3
   maxFallVelocity: -30
   minFallVelocity: -3
-  emoteDuration: 10
+  emoteDuration: 8
   emoteCooldown: 0
 --- !u!54 &289403747
 Rigidbody:
@@ -2314,7 +2314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ec10a43b9ab30d408076f582ee404fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTo: {x: 0, y: 5, z: 0}
+  moveTo: {x: 0, y: 3, z: 0}
   moveTime: 3
   ease: 4
 --- !u!1 &1220277057

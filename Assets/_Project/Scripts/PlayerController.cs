@@ -13,6 +13,7 @@ namespace CannonMonke
         [SerializeField, Self] Animator animator;
         [SerializeField, Self] Rigidbody rb;
         [SerializeField, Self] GroundChecker groundChecker;
+        [SerializeField, Self] Interactor interactor;
         [SerializeField, Anywhere] CinemachineCamera cinemachineCamera;
         [SerializeField, Anywhere] InputReader inputReader;
 
@@ -30,11 +31,12 @@ namespace CannonMonke
         [SerializeField] float minFallVelocity = -3f;
 
         [Header("Other Settings")]
+        [SerializeField] float interactDuration = 1f;
+        [SerializeField] float interactCooldown = 1f;
         [SerializeField] float emoteDuration = 8f;
         [SerializeField] float emoteCooldown = 0f;
 
         const float Zerof = 0f;
-        //bool isEmoting;
 
         Transform mainCamera;
 
@@ -47,6 +49,8 @@ namespace CannonMonke
         List<Timer> timers;
         CountdownTimer jumpTimer;
         CountdownTimer jumpCooldownTimer;
+        CountdownTimer interactTimer;
+        CountdownTimer interactCooldownTimer;
         CountdownTimer emoteTimer;
         CountdownTimer emoteCooldownTimer;
 
@@ -65,24 +69,48 @@ namespace CannonMonke
 
             // Invoke event when transform is teleported, adjusting cinemachine cam position accordingly
             cinemachineCamera.OnTargetObjectWarped(
-                transform, 
+                transform,
                 transform.position - cinemachineCamera.transform.position - Vector3.forward);
 
             rb.freezeRotation = true;
 
+            SetupTimers();
+            SetupStatemachine();
+        }
+
+        void SetupTimers()
+        {
             // Setup timers
             jumpTimer = new CountdownTimer(jumpDuration);
             jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+
+            interactTimer = new CountdownTimer(interactDuration);
+            interactCooldownTimer = new CountdownTimer(interactCooldown);
+
             emoteTimer = new CountdownTimer(emoteDuration);
             emoteCooldownTimer = new CountdownTimer(emoteCooldown);
-            timers = new(4) { jumpTimer, jumpCooldownTimer, emoteTimer, emoteCooldownTimer };
+
+            timers = new(6) {
+                jumpTimer,
+                jumpCooldownTimer,
+                interactTimer,
+                interactCooldownTimer,
+                emoteTimer,
+                emoteCooldownTimer,
+            };
 
             jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
             jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
 
+            interactTimer.OnTimerStart += () => interactor.HandleInteraction();
+            interactTimer.OnTimerStop += () => interactCooldownTimer.Start();
+
             emoteTimer.OnTimerStart += () => movement = Vector3.zero;
             emoteTimer.OnTimerStop += () => emoteCooldownTimer.Start();
-
+        }
+        
+        void SetupStatemachine()
+        {
             // Setup Statemachine
             stateMachine = new StateMachine();
 
@@ -93,7 +121,7 @@ namespace CannonMonke
             var emoteState = new EmoteState(this, animator);
 
             // Define transitions
-            At(locomotionState, jumpState, 
+            At(locomotionState, jumpState,
                 new FuncPredicate(() => jumpTimer.IsRunning));
 
             Any(fallingState,
@@ -106,32 +134,32 @@ namespace CannonMonke
                 && movement.magnitude == Zerof));
 
             Any(locomotionState,
-                new FuncPredicate(() => groundChecker.isGrounded 
-                && !jumpTimer.IsRunning 
+                new FuncPredicate(() => groundChecker.isGrounded
+                && !jumpTimer.IsRunning
                 && !emoteTimer.IsRunning));
 
             // Set initial state
             stateMachine.SetState(locomotionState);
         }
-
+        
         void At(IState from, IState to, 
             IPredicate condition) => stateMachine.AddTransition(from, to, condition);
 
         void Any(IState to, 
             IPredicate condition) => stateMachine.AddAnyTransition(to, condition);
 
-
         void Start() => inputReader.EnablePlayerActions();
 
         void OnEnable()
         {
-            // TODO: Interact 
+            inputReader.Interact += OnInteract;
             inputReader.Emote1 += OnEmote;
             inputReader.Jump += OnJump;
         }
 
         void OnDisable()
         {
+            inputReader.Interact -= OnInteract;
             inputReader.Emote1 -= OnEmote;
             inputReader.Jump -= OnJump;
         }
@@ -149,6 +177,20 @@ namespace CannonMonke
             else if (!performed && jumpTimer.IsRunning)
             {
                 jumpTimer.Stop();
+            }
+        }
+
+        void OnInteract(bool performed)
+        {
+            if (performed 
+                && !interactTimer.IsRunning
+                && !interactCooldownTimer.IsRunning)
+            {
+                interactTimer.Start();
+            }
+            else if (!performed && interactTimer.IsRunning)
+            {
+                interactTimer.Stop();
             }
         }
 
