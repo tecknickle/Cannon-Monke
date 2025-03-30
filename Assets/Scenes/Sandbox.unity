@@ -550,7 +550,7 @@ MonoBehaviour:
   jumpCooldown: 0
   gravityMultiplier: 3
   maxFallVelocity: -30
-  minFallVelocity: 0
+  minFallVelocity: -3
 --- !u!54 &289403747
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1788,7 +1788,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 6e2efdd08a8417e41a2bc5d7459d2a1e, type: 2}
-  cinemachineCamera: {fileID: 563396145}
+  cinemachineCamera: {fileID: 563396144}
+  cameraSensitivity: 1
 --- !u!1 &905141285
 GameObject:
   m_ObjectHideFlags: 0
@@ -2182,9 +2183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ec10a43b9ab30d408076f582ee404fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTo: {x: 0, y: 10, z: 0}
-  moveTime: 1
-  ease: 7
+  moveTo: {x: 0, y: 5, z: 0}
+  moveTime: 3
+  ease: 4
 --- !u!1 &1220277057
 GameObject:
   m_ObjectHideFlags: 0

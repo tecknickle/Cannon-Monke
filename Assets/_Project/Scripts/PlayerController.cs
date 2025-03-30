@@ -27,7 +27,11 @@ namespace CannonMonke
         [SerializeField] float jumpCooldown = 0f;
         [SerializeField] float gravityMultiplier = 3f;
         [SerializeField] float maxFallVelocity = -30f;
-        [SerializeField] float minFallVelocity = 0f;
+        [SerializeField] float minFallVelocity = -3f;
+
+        [Header("Other Settings")]
+        [SerializeField] float emoteDuration = 1f;
+        [SerializeField] float emoteCooldown = 0f;
 
         const float Zerof = 0f;
 
@@ -42,6 +46,8 @@ namespace CannonMonke
         List<Timer> timers;
         CountdownTimer jumpTimer;
         CountdownTimer jumpCooldownTimer;
+        CountdownTimer emoteTimer;
+        CountdownTimer emoteCooldownTimer;
 
         StateMachine stateMachine;
         
@@ -65,10 +71,14 @@ namespace CannonMonke
             // Setup timers
             jumpTimer = new CountdownTimer(jumpDuration);
             jumpCooldownTimer = new CountdownTimer(jumpCooldown);
-            timers = new(2) { jumpTimer, jumpCooldownTimer };
+            emoteTimer = new CountdownTimer(emoteDuration);
+            emoteCooldownTimer = new CountdownTimer(emoteCooldown);
+            timers = new(4) { jumpTimer, jumpCooldownTimer, emoteTimer, emoteCooldownTimer };
 
             jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
             jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
+
+            emoteTimer.OnTimerStop += () => emoteCooldownTimer.Start();
 
             // Setup Statemachine
             stateMachine = new StateMachine();
@@ -77,6 +87,7 @@ namespace CannonMonke
             var locomotionState = new LocomotionState(this, animator);
             var jumpState = new JumpState(this, animator);
             var fallingState = new FallingState(this, animator);
+            var emoteState = new EmoteState(this, animator);
 
             // Define transitions
             At(locomotionState, jumpState, 
@@ -85,9 +96,16 @@ namespace CannonMonke
             At(fallingState, locomotionState, 
                 new FuncPredicate(() => groundChecker.isGrounded));
 
+            At(emoteState, locomotionState,
+                new FuncPredicate(() => rb.linearVelocity.magnitude > Zerof));
+
             Any(fallingState,
                 new FuncPredicate(() => !groundChecker.isGrounded
                 && rb.linearVelocity.y < minFallVelocity));
+
+            Any(emoteState,
+                new FuncPredicate(() => emoteTimer.IsRunning
+                && groundChecker.isGrounded));
 
             // Set initial state
             stateMachine.SetState(locomotionState);
@@ -105,11 +123,13 @@ namespace CannonMonke
         void OnEnable()
         {
             // TODO: Interact 
+            inputReader.Emote1 += OnEmote;
             inputReader.Jump += OnJump;
         }
 
         void OnDisable()
         {
+            inputReader.Emote1 -= OnEmote;
             inputReader.Jump -= OnJump;
         }
 
@@ -125,6 +145,21 @@ namespace CannonMonke
             else if (!performed && jumpTimer.IsRunning)
             {
                 jumpTimer.Stop();
+            }
+        }
+
+        void OnEmote(bool performed)
+        {
+            if (performed
+                && !emoteTimer.IsRunning
+                && !emoteCooldownTimer.IsRunning
+                && groundChecker.isGrounded)
+            {
+                emoteTimer.Start();
+            }
+            else if (!performed && emoteTimer.IsRunning)
+            {
+                emoteTimer.Stop();
             }
         }
 
@@ -167,9 +202,8 @@ namespace CannonMonke
                 verticalVelocity = Zerof;
                 return;
             }
-
             // If jumping or falling velocity
-            if (!groundChecker.isGrounded)
+            else
             {
                 // Gravity takes over
                 verticalVelocity += Physics.gravity.y * gravityMultiplier * Time.fixedDeltaTime;
@@ -186,6 +220,7 @@ namespace CannonMonke
                 rb.linearVelocity.x, 
                 verticalVelocity, 
                 rb.linearVelocity.z);
+            Debug.Log("vertical velocity: " + verticalVelocity);
         }
 
          public void HandleMovement()

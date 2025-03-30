@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -14,6 +15,7 @@ namespace CannonMonke
         public event UnityAction DisableMouseControlCamera = delegate {};
         public event UnityAction<bool> Jump = delegate {};
         public event UnityAction<bool> Interact = delegate {};
+        public event UnityAction<bool> Emote1 = delegate {};
 
         PlayerInputActions inputActions;
 
@@ -84,6 +86,19 @@ namespace CannonMonke
                     break;
                 case InputActionPhase.Canceled:
                     Interact.Invoke(false);
+                    break;
+            }
+        }
+
+        public void OnEmote1(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    Emote1.Invoke(true);
+                    break;
+                case InputActionPhase.Canceled:
+                    Emote1.Invoke(false);
                     break;
             }
         }

@@ -10,6 +10,7 @@ namespace CannonMonke
         protected static readonly int LocomotionHash = Animator.StringToHash("Locomotion");
         protected static readonly int JumpHash = Animator.StringToHash("Jump");
         protected static readonly int FallingHash = Animator.StringToHash("Falling");
+        protected static readonly int Emote1Hash = Animator.StringToHash("Emote1");
 
         protected const float crossFadeDuration = 0.1f;
         protected const float longCrossFadeDuration = 1f;
