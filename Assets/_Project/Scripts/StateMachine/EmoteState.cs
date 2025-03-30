@@ -14,8 +14,7 @@ namespace CannonMonke
 
         public override void FixedUpdate()
         {
-            player.HandleJump();
-            player.HandleMovement();
+            player.HandleGravity();
         }
     }
 }

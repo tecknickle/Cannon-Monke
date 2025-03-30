@@ -30,10 +30,11 @@ namespace CannonMonke
         [SerializeField] float minFallVelocity = -3f;
 
         [Header("Other Settings")]
-        [SerializeField] float emoteDuration = 1f;
+        [SerializeField] float emoteDuration = 8f;
         [SerializeField] float emoteCooldown = 0f;
 
         const float Zerof = 0f;
+        //bool isEmoting;
 
         Transform mainCamera;
 
@@ -56,6 +57,7 @@ namespace CannonMonke
 
         void Awake()
         {
+            //isEmoting = false;
             mainCamera = Camera.main.transform;
 
             cinemachineCamera.Follow = transform;
@@ -78,6 +80,7 @@ namespace CannonMonke
             jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
             jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
 
+            emoteTimer.OnTimerStart += () => movement = Vector3.zero;
             emoteTimer.OnTimerStop += () => emoteCooldownTimer.Start();
 
             // Setup Statemachine
@@ -93,19 +96,19 @@ namespace CannonMonke
             At(locomotionState, jumpState, 
                 new FuncPredicate(() => jumpTimer.IsRunning));
 
-            At(fallingState, locomotionState, 
-                new FuncPredicate(() => groundChecker.isGrounded));
-
-            At(emoteState, locomotionState,
-                new FuncPredicate(() => rb.linearVelocity.magnitude > Zerof));
-
             Any(fallingState,
                 new FuncPredicate(() => !groundChecker.isGrounded
                 && rb.linearVelocity.y < minFallVelocity));
 
-            Any(emoteState,
+            At(locomotionState, emoteState,
                 new FuncPredicate(() => emoteTimer.IsRunning
-                && groundChecker.isGrounded));
+                && groundChecker.isGrounded
+                && movement.magnitude == Zerof));
+
+            Any(locomotionState,
+                new FuncPredicate(() => groundChecker.isGrounded 
+                && !jumpTimer.IsRunning 
+                && !emoteTimer.IsRunning));
 
             // Set initial state
             stateMachine.SetState(locomotionState);
@@ -138,6 +141,7 @@ namespace CannonMonke
             if (performed
                 && !jumpTimer.IsRunning
                 && !jumpCooldownTimer.IsRunning
+                && !emoteTimer.IsRunning
                 && groundChecker.isGrounded)
             {
                 jumpTimer.Start();
@@ -150,10 +154,12 @@ namespace CannonMonke
 
         void OnEmote(bool performed)
         {
+            // Emote only plays when holding emote key down
             if (performed
                 && !emoteTimer.IsRunning
                 && !emoteCooldownTimer.IsRunning
-                && groundChecker.isGrounded)
+                && groundChecker.isGrounded
+                && movement.magnitude == Zerof)
             {
                 emoteTimer.Start();
             }
@@ -194,7 +200,7 @@ namespace CannonMonke
             }
         }
 
-        public void HandleJump()
+        public void HandleGravity()
         {
             // If not jumping and grounded, keep jump velocity at 0
             if (!jumpTimer.IsRunning && groundChecker.isGrounded)
