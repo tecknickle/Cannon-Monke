@@ -4,6 +4,7 @@ namespace CannonMonke
 {
     public class GroundChecker : MonoBehaviour
     {
+        [Header("Ground Check Settings")]
         [SerializeField] float groundDistance = 0.04f;
         [SerializeField] LayerMask groundLayers;
 

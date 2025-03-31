@@ -1,7 +1,9 @@
+using UnityEngine;
+
 namespace CannonMonke
 {
     public interface IInteractable
     {
-        public void Interact();
+        public void Interact(Transform interactor);
     }
 }

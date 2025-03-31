@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Moving Platform
+  - Crate
+  - Collectible
   layers:
   - Default
   - TransparentFX
@@ -14,8 +16,8 @@ TagManager:
   - Water
   - UI
   - Standable Objects
-  - 
-  - 
+  - Player
+  - Holdable Objects
   - 
   - 
   - 

@@ -13,7 +13,7 @@ namespace CannonMonke
         [SerializeField, Anywhere] InputReader inputReader;
         [SerializeField, Anywhere] CinemachineOrbitalFollow cinemachineCamera;
 
-        [Header("Settings")]
+        [Header("Camera Control Settings")]
         [SerializeField, Range(0, 5)] float cameraSensitivity = 1f;
 
         bool cameraMovementLock;

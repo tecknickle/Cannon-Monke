@@ -14,6 +14,7 @@ namespace CannonMonke
         public event UnityAction EnableMouseControlCamera = delegate {};
         public event UnityAction DisableMouseControlCamera = delegate {};
         public event UnityAction<bool> Jump = delegate {};
+        public event UnityAction<bool> Fire = delegate {};
         public event UnityAction<bool> Interact = delegate {};
         public event UnityAction<bool> Emote1 = delegate {};
 
@@ -44,7 +45,15 @@ namespace CannonMonke
 
         public void OnFire(InputAction.CallbackContext context)
         {
-            // no op
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    Fire.Invoke(true);
+                    break;
+                case InputActionPhase.Canceled:
+                    Fire.Invoke(false);
+                    break;
+            }
         }
 
         public void OnJump(InputAction.CallbackContext context)
