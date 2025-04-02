@@ -12,7 +12,7 @@ namespace CannonMonke
             rb = GetComponent<Rigidbody>();
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (holder != null)
             {

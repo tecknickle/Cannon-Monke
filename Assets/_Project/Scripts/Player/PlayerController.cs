@@ -32,7 +32,9 @@ namespace CannonMonke
         [SerializeField] float minFallVelocity = -3f;
 
         [Header("Throw Settings")]
-        [SerializeField] float throwDuration = 1f;
+        [SerializeField] float throwForce = 10f;
+        [SerializeField] float dropForce = 5f;
+        [SerializeField] float throwDuration = 0.3f;
         [SerializeField] float throwCooldown = 0f;
 
         [Header("Other Settings")]
@@ -118,10 +120,10 @@ namespace CannonMonke
             jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
 
             interactTimer.OnTimerStart += () => interactor.DoInteraction();
-            interactTimer.OnTimerStop += () => objectHolding.DropObject();
+            interactTimer.OnTimerStop += () => objectHolding.DropObject(dropForce);
             interactTimer.OnTimerStop += () => interactCooldownTimer.Start();
 
-            throwObjectTimer.OnTimerStart += () => objectHolding.ThrowObject();
+            throwObjectTimer.OnTimerStart += () => objectHolding.ThrowObject(throwForce);
             throwObjectTimer.OnTimerStop += () => throwObjectCooldownTimer.Start();
 
             emoteTimer.OnTimerStart += () => movement = Vector3.zero;
@@ -138,23 +140,33 @@ namespace CannonMonke
             var jumpState = new JumpState(this, animator);
             var fallingState = new FallingState(this, animator);
             var emoteState = new EmoteState(this, animator);
+            var holdingLocomotionState = new HoldingLocomotionState(this, animator);
+            var holdingThrowState = new HoldingThrowState(this, animator);
 
             // Define transitions
             At(locomotionState, jumpState,
                 new FuncPredicate(() => jumpTimer.IsRunning));
 
-            Any(fallingState,
-                new FuncPredicate(() => !groundChecker.isGrounded
-                && rb.linearVelocity.y < minFallVelocity));
+            At(locomotionState, holdingLocomotionState,
+                new FuncPredicate(() => objectHolding.isHolding));
+
+            At(holdingLocomotionState, holdingThrowState,
+                new FuncPredicate(() => throwObjectTimer.IsRunning));
 
             At(locomotionState, emoteState,
                 new FuncPredicate(() => emoteTimer.IsRunning
                 && groundChecker.isGrounded));
+            
+            Any(fallingState,
+                new FuncPredicate(() => !groundChecker.isGrounded
+                && rb.linearVelocity.y < minFallVelocity));
 
             Any(locomotionState,
                 new FuncPredicate(() => groundChecker.isGrounded
                 && !jumpTimer.IsRunning
-                && !emoteTimer.IsRunning));
+                && !emoteTimer.IsRunning
+                && !throwObjectTimer.IsRunning
+                && !objectHolding.isHolding));
 
             // Set initial state
             stateMachine.SetState(locomotionState);
@@ -221,10 +233,11 @@ namespace CannonMonke
                 && !throwObjectCooldownTimer.IsRunning)
             {
                 throwObjectTimer.Start();
+                rb.linearVelocity = Vector3.zero;
             }
             else if (!performed && throwObjectTimer.IsRunning)
             {
-                throwObjectTimer.Stop();
+                // no op: allows player to complete throw phase to end of timer
             }
         }
 
@@ -237,6 +250,7 @@ namespace CannonMonke
                 && groundChecker.isGrounded)
             {
                 emoteTimer.Start();
+                rb.linearVelocity = Vector3.zero;
             }
             else if (!performed && emoteTimer.IsRunning)
             {

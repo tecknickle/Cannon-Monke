@@ -1,5 +1,6 @@
 ﻿using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.Accessibility;
 
 namespace CannonMonke
 {
@@ -8,11 +9,15 @@ namespace CannonMonke
         [Header("Holding Position")]
         [SerializeField, Anywhere] Transform holdingPosition;
 
-        [Header("Object Handling Settings")]
-        [SerializeField] float throwForce = 10f;
-        [SerializeField] float dropForwardForce = 5f;
+        const float DefaultDropForce = 1f;
 
         IHoldable heldObject;
+        public bool isHolding;
+
+        void Awake()
+        {
+            isHolding = false;
+        }
 
         public void PickUpObject(IHoldable objectToHold)
         {
@@ -20,7 +25,7 @@ namespace CannonMonke
             if (heldObject != null)
             {
                 // Reset current held object in order to pick up next object
-                DropObject();
+                DropObject(DefaultDropForce);
                 heldObject = null;
 
                 heldObject = objectToHold;
@@ -31,26 +36,29 @@ namespace CannonMonke
                 heldObject = objectToHold;
                 heldObject.Pickup(holdingPosition.transform);
             }
+            isHolding = true;
         }
 
         // Used methods in PlayerController
-        public void DropObject()
+        public void DropObject(float dropForce)
         {
             if (heldObject != null)
             {
                 // A weaker throw so object doesn't sit on player after drop
-                heldObject.Throw(holdingPosition.transform.forward, dropForwardForce);
+                heldObject.Throw(holdingPosition.transform.forward, dropForce);
                 heldObject = null;
             }
+            isHolding = false;
         }
 
-        public void ThrowObject()
+        public void ThrowObject(float throwForce)
         {
             if (heldObject != null)
             {
                 heldObject.Throw(holdingPosition.transform.up + transform.forward, throwForce);
                 heldObject = null;
             }
+            isHolding = false;
         }
     }
 }
