@@ -37,6 +37,11 @@ namespace CannonMonke
         [SerializeField] float throwDuration = 0.3f;
         [SerializeField] float throwCooldown = 0f;
 
+        [Header("Push Settings")]
+        [SerializeField] float pushForce = 10f;
+        [SerializeField] float pushDistance = 2f;
+        [SerializeField] float pushCooldownDuration = 0.5f;
+
         [Header("Other Settings")]
         [SerializeField] float interactDuration = 5f;
         [SerializeField] float interactCooldown = 1f;
@@ -52,6 +57,7 @@ namespace CannonMonke
         float verticalVelocity;
 
         Vector3 movement;
+        Vector3 pushRayOffset = new(0f, 1f, 0f);
 
         List<Timer> timers;
 
@@ -66,6 +72,8 @@ namespace CannonMonke
 
         CountdownTimer throwObjectTimer;
         CountdownTimer throwObjectCooldownTimer;
+
+        CountdownTimer pushTimer;
 
         StateMachine stateMachine;
         
@@ -105,7 +113,9 @@ namespace CannonMonke
             throwObjectTimer = new CountdownTimer(throwDuration);
             throwObjectCooldownTimer = new CountdownTimer(throwCooldown);
 
-            timers = new(8) {
+            pushTimer = new CountdownTimer(pushCooldownDuration);
+
+            timers = new(9) {
                 jumpTimer,
                 jumpCooldownTimer,
                 interactTimer,
@@ -114,6 +124,7 @@ namespace CannonMonke
                 throwObjectCooldownTimer,
                 emoteTimer,
                 emoteCooldownTimer,
+                pushTimer
             };
 
             jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
@@ -128,13 +139,15 @@ namespace CannonMonke
 
             emoteTimer.OnTimerStart += () => movement = Vector3.zero;
             emoteTimer.OnTimerStop += () => emoteCooldownTimer.Start();
+
+            pushTimer.OnTimerStart += () => movement = Vector3.zero;
         }
         
         void SetupStatemachine()
         {
             // Setup Statemachine
             stateMachine = new StateMachine();
-
+            
             // Declare states
             var locomotionState = new LocomotionState(this, animator);
             var jumpState = new JumpState(this, animator);
@@ -142,6 +155,7 @@ namespace CannonMonke
             var emoteState = new EmoteState(this, animator);
             var holdingLocomotionState = new HoldingLocomotionState(this, animator);
             var holdingThrowState = new HoldingThrowState(this, animator);
+            var pushState = new PushState(this, animator);
 
             // Define transitions
             At(locomotionState, jumpState,
@@ -156,6 +170,12 @@ namespace CannonMonke
             At(locomotionState, emoteState,
                 new FuncPredicate(() => emoteTimer.IsRunning
                 && groundChecker.isGrounded));
+
+            At(locomotionState, pushState,
+                new FuncPredicate(() => pushTimer.IsRunning));
+
+            //At(pushState, locomotionState,
+            //    new FuncPredicate(() => !pushTimer.IsRunning));
             
             Any(fallingState,
                 new FuncPredicate(() => !groundChecker.isGrounded
@@ -166,7 +186,8 @@ namespace CannonMonke
                 && !jumpTimer.IsRunning
                 && !emoteTimer.IsRunning
                 && !throwObjectTimer.IsRunning
-                && !objectHolding.isHolding));
+                && !objectHolding.isHolding
+                && !pushTimer.IsRunning));
 
             // Set initial state
             stateMachine.SetState(locomotionState);
@@ -181,7 +202,7 @@ namespace CannonMonke
         void Start() => inputReader.EnablePlayerActions();
 
         void OnEnable()
-        {
+        {   
             inputReader.Fire += OnFire;
             inputReader.Interact += OnInteract;
             inputReader.Emote1 += OnEmote;
@@ -194,6 +215,21 @@ namespace CannonMonke
             inputReader.Interact -= OnInteract;
             inputReader.Emote1 -= OnEmote;
             inputReader.Jump -= OnJump;
+        }
+
+        public void Push()
+        {
+            Ray ray = new(transform.position + pushRayOffset, transform.forward);
+            
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, pushDistance))
+            {
+                Debug.Log("Hit: " + hitInfo.collider.gameObject.name);
+                if (hitInfo.collider.CompareTag("Crate"))
+                {
+                    hitInfo.collider.GetComponent<Rigidbody>()
+                        .AddForce(transform.forward * pushForce, ForceMode.Impulse);
+                }
+            }
         }
 
         void OnJump(bool performed)
@@ -216,11 +252,16 @@ namespace CannonMonke
         {
             if (performed 
                 && !interactTimer.IsRunning
-                && !interactCooldownTimer.IsRunning)
+                && !interactCooldownTimer.IsRunning
+                && groundChecker.isGrounded)
             {
                 interactTimer.Start();
             }
             else if (!performed && interactTimer.IsRunning)
+            {
+                interactTimer.Stop();
+            }
+            else if (interactTimer.IsRunning && !groundChecker.isGrounded)
             {
                 interactTimer.Stop();
             }
@@ -230,14 +271,17 @@ namespace CannonMonke
         {
             if (performed
                 && !throwObjectTimer.IsRunning
-                && !throwObjectCooldownTimer.IsRunning)
+                && !throwObjectCooldownTimer.IsRunning
+                && objectHolding.isHolding)
             {
                 throwObjectTimer.Start();
                 rb.linearVelocity = Vector3.zero;
             }
-            else if (!performed && throwObjectTimer.IsRunning)
+            else if (performed 
+                && !objectHolding.isHolding
+                && !pushTimer.IsRunning)
             {
-                // no op: allows player to complete throw phase to end of timer
+                pushTimer.Start();
             }
         }
 
@@ -315,7 +359,7 @@ namespace CannonMonke
                 rb.linearVelocity.x, 
                 verticalVelocity, 
                 rb.linearVelocity.z);
-            Debug.Log("vertical velocity: " + verticalVelocity);
+            // Debug.Log("vertical velocity: " + verticalVelocity);
         }
 
          public void HandleMovement()

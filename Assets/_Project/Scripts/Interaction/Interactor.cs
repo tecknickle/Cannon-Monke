@@ -9,6 +9,7 @@ namespace CannonMonke
         [Header("Interact Settings")]
         [SerializeField] float interactRange = 3f;
         [SerializeField] bool isDebugging;
+        [SerializeField] Vector3 rayPositionOffset = new(0f, 1f, 0f);
 
         void Start()
         {
@@ -19,13 +20,16 @@ namespace CannonMonke
         {
             if (isDebugging)
             {
-                Debug.DrawRay(transform.position, transform.forward * interactRange, Color.red);
+                Debug.DrawRay(
+                    transform.position + rayPositionOffset, 
+                    transform.forward * interactRange, 
+                    Color.red);
             }
         }
 
         public void DoInteraction()
         {
-            Ray ray = new(transform.position, transform.forward);
+            Ray ray = new(transform.position + rayPositionOffset, transform.forward);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, interactRange))
             {

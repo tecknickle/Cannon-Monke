@@ -11,10 +11,5 @@ namespace CannonMonke
             Debug.Log("On Enter Holding Throw State.");
             animator.CrossFade(HoldingThrowHash, shortCrossFadeDuration);
         }
-
-        public override void FixedUpdate()
-        {
-            // no op
-        }
     }
 }

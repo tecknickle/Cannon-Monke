@@ -13,6 +13,7 @@ namespace CannonMonke
         protected static readonly int Emote1Hash = Animator.StringToHash("Emote1");
         protected static readonly int HoldingLocomotionHash = Animator.StringToHash("HoldingLocomotion");
         protected static readonly int HoldingThrowHash = Animator.StringToHash("HoldingThrow");
+        protected static readonly int PushHash = Animator.StringToHash("Push");
 
         protected const float crossFadeDuration = 0.1f;
         protected const float longCrossFadeDuration = 1f;
