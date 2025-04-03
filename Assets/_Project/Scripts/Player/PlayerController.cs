@@ -25,26 +25,24 @@ namespace CannonMonke
 
         [Header("Jump Settings")]
         [SerializeField] float jumpForce = 20f;
-        [SerializeField] float jumpDuration = 1f;
-        [SerializeField] float jumpCooldown = 0f;
+        [SerializeField] float jumpCooldown = 0.5f;
         [SerializeField] float gravityMultiplier = 3f;
         [SerializeField] float maxFallVelocity = -30f;
         [SerializeField] float minFallVelocity = -3f;
 
         [Header("Throw Settings")]
-        [SerializeField] float throwForce = 10f;
+        [SerializeField] public float throwForce = 10f;
         [SerializeField] float dropForce = 5f;
-        [SerializeField] float throwDuration = 0.3f;
-        [SerializeField] float throwCooldown = 0f;
+        [SerializeField] float throwCooldown = 0.3f;
 
         [Header("Push Settings")]
         [SerializeField] float pushForce = 10f;
         [SerializeField] float pushDistance = 2f;
-        [SerializeField] float pushCooldownDuration = 0.5f;
+        [SerializeField] float pushCooldown = 0.3f;
 
         [Header("Other Settings")]
         [SerializeField] float interactDuration = 5f;
-        [SerializeField] float interactCooldown = 1f;
+        [SerializeField] float interactCooldown = 0.5f;
         [SerializeField] float emoteDuration = 8f;
         [SerializeField] float emoteCooldown = 0f;
 
@@ -62,7 +60,6 @@ namespace CannonMonke
         List<Timer> timers;
 
         CountdownTimer jumpTimer;
-        CountdownTimer jumpCooldownTimer;
 
         CountdownTimer interactTimer;
         CountdownTimer interactCooldownTimer;
@@ -71,8 +68,6 @@ namespace CannonMonke
         CountdownTimer emoteCooldownTimer;
 
         CountdownTimer throwObjectTimer;
-        CountdownTimer throwObjectCooldownTimer;
-
         CountdownTimer pushTimer;
 
         StateMachine stateMachine;
@@ -101,8 +96,7 @@ namespace CannonMonke
         void SetupTimers()
         {
             // Setup timers
-            jumpTimer = new CountdownTimer(jumpDuration);
-            jumpCooldownTimer = new CountdownTimer(jumpCooldown);
+            jumpTimer = new CountdownTimer(jumpCooldown);
 
             interactTimer = new CountdownTimer(interactDuration);
             interactCooldownTimer = new CountdownTimer(interactCooldown);
@@ -110,35 +104,37 @@ namespace CannonMonke
             emoteTimer = new CountdownTimer(emoteDuration);
             emoteCooldownTimer = new CountdownTimer(emoteCooldown);
 
-            throwObjectTimer = new CountdownTimer(throwDuration);
-            throwObjectCooldownTimer = new CountdownTimer(throwCooldown);
+            throwObjectTimer = new CountdownTimer(throwCooldown);
+            pushTimer = new CountdownTimer(pushCooldown);
 
-            pushTimer = new CountdownTimer(pushCooldownDuration);
-
-            timers = new(9) {
+            timers = new(7) {
                 jumpTimer,
-                jumpCooldownTimer,
                 interactTimer,
                 interactCooldownTimer,
                 throwObjectTimer,
-                throwObjectCooldownTimer,
                 emoteTimer,
                 emoteCooldownTimer,
                 pushTimer
             };
 
             jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
-            jumpTimer.OnTimerStop += () => jumpCooldownTimer.Start();
 
             interactTimer.OnTimerStart += () => interactor.DoInteraction();
-            interactTimer.OnTimerStop += () => objectHolding.DropObject(dropForce);
-            interactTimer.OnTimerStop += () => interactCooldownTimer.Start();
 
-            throwObjectTimer.OnTimerStart += () => objectHolding.ThrowObject(throwForce);
-            throwObjectTimer.OnTimerStop += () => throwObjectCooldownTimer.Start();
+            interactTimer.OnTimerStop += () =>
+            {
+                if (objectHolding.isHolding) objectHolding.DropObject(dropForce);
+                interactCooldownTimer.Start();
+            };
 
             emoteTimer.OnTimerStart += () => movement = Vector3.zero;
             emoteTimer.OnTimerStop += () => emoteCooldownTimer.Start();
+
+            throwObjectTimer.OnTimerStart += () =>
+            {
+                movement = Vector3.zero;
+                objectHolding.ThrowObject(throwForce);
+            };
 
             pushTimer.OnTimerStart += () => movement = Vector3.zero;
         }
@@ -166,17 +162,14 @@ namespace CannonMonke
 
             At(holdingLocomotionState, holdingThrowState,
                 new FuncPredicate(() => throwObjectTimer.IsRunning));
+            
+            At(locomotionState, pushState,
+                new FuncPredicate(() => pushTimer.IsRunning));
 
             At(locomotionState, emoteState,
                 new FuncPredicate(() => emoteTimer.IsRunning
                 && groundChecker.isGrounded));
 
-            At(locomotionState, pushState,
-                new FuncPredicate(() => pushTimer.IsRunning));
-
-            //At(pushState, locomotionState,
-            //    new FuncPredicate(() => !pushTimer.IsRunning));
-            
             Any(fallingState,
                 new FuncPredicate(() => !groundChecker.isGrounded
                 && rb.linearVelocity.y < minFallVelocity));
@@ -236,15 +229,10 @@ namespace CannonMonke
         {
             if (performed
                 && !jumpTimer.IsRunning
-                && !jumpCooldownTimer.IsRunning
                 && !emoteTimer.IsRunning
                 && groundChecker.isGrounded)
             {
                 jumpTimer.Start();
-            }
-            else if (!performed && jumpTimer.IsRunning)
-            {
-                jumpTimer.Stop();
             }
         }
 
@@ -271,11 +259,9 @@ namespace CannonMonke
         {
             if (performed
                 && !throwObjectTimer.IsRunning
-                && !throwObjectCooldownTimer.IsRunning
                 && objectHolding.isHolding)
             {
                 throwObjectTimer.Start();
-                rb.linearVelocity = Vector3.zero;
             }
             else if (performed 
                 && !objectHolding.isHolding
@@ -294,7 +280,6 @@ namespace CannonMonke
                 && groundChecker.isGrounded)
             {
                 emoteTimer.Start();
-                rb.linearVelocity = Vector3.zero;
             }
             else if (!performed && emoteTimer.IsRunning)
             {

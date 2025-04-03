@@ -619,8 +619,11 @@ MonoBehaviour:
   dropForce: 5
   throwDuration: 0.3
   throwCooldown: 0
+  pushForce: 10
+  pushDistance: 2
+  pushCooldownDuration: 0.3
   interactDuration: 5
-  interactCooldown: 1
+  interactCooldown: 0.5
   emoteDuration: 8
   emoteCooldown: 0
 --- !u!54 &289403747
@@ -715,6 +718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactRange: 3
   isDebugging: 0
+  rayPositionOffset: {x: 0, y: 1, z: 0}
 --- !u!114 &289403752
 MonoBehaviour:
   m_ObjectHideFlags: 0
