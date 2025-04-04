@@ -58,6 +58,7 @@ namespace CannonMonke
         Vector3 pushRayOffset = new(0f, 0.5f, 0f);
 
         bool IsInCannonMode;
+        CannonController currentCannon;
 
         List<Timer> timers;
 
@@ -81,6 +82,7 @@ namespace CannonMonke
         {
             mainCamera = Camera.main.transform;
             IsInCannonMode = false;
+            currentCannon = null;
 
             cinemachineCamera.Follow = transform;
             cinemachineCamera.LookAt = transform;
@@ -360,11 +362,6 @@ namespace CannonMonke
 
          public void HandleMovement()
         {
-            var movementDirection = new Vector3(
-                inputReader.Direction.x, 
-                0f, 
-                inputReader.Direction.y).normalized;
-
             // Rotate movement direction to match camera rotation
             var adjustedDirection = Quaternion.AngleAxis(mainCamera.eulerAngles.y, Vector3.up) * movement;
             
@@ -389,7 +386,7 @@ namespace CannonMonke
         void HandleHorizontalMovement(Vector3 adjustedDirection)
             {
                 // Move the player
-                Vector3 velocity = adjustedDirection * moveSpeed * Time.fixedDeltaTime;
+                Vector3 velocity = moveSpeed * Time.fixedDeltaTime * adjustedDirection;
 
                 rb.linearVelocity = new(
                     velocity.x, 
@@ -417,15 +414,19 @@ namespace CannonMonke
                 smoothTime);
         }
 
-        public bool PlayerEnterCannonMode(bool state, CannonController currentCannon)
+        public bool PlayerCannonMode(bool state, CannonController cannon)
         {
-            if (currentCannon != null)
+            if (cannon != null)
             {
-                currentCannon.EnterCannonMode(cinemachineCamera);
+                rb.linearVelocity = Vector3.zero; // Stop player movement when entering cannon mode
+                currentCannon = cannon;
+                // Pass camera component to cannon controller
+                cannon.EnterCannonMode(cinemachineCamera, inputReader);
                 return IsInCannonMode = state;
             }
             else
             {
+                currentCannon = null;
                 return IsInCannonMode = false;
             }
         }

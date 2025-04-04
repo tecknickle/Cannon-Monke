@@ -548,7 +548,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546223ef7cee2834ba48aa2c834fb6a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputReader: {fileID: 11400000, guid: 6e2efdd08a8417e41a2bc5d7459d2a1e, type: 2}
+  cannonBarrel: {fileID: 303741198}
+  cannonBase: {fileID: 303741197}
   horizontalRotationSpeed: 100
   verticalRotationSpeed: 100
   positionOffset: {x: 0, y: -2, z: -6}
@@ -690,6 +691,16 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 694221032}
   m_SourcePrefab: {fileID: 100100000, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+--- !u!4 &303741197 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 533193074659131909, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+  m_PrefabInstance: {fileID: 303741196}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &303741198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3416400609385885712, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+  m_PrefabInstance: {fileID: 303741196}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
