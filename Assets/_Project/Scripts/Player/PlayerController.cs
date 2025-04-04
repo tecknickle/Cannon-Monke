@@ -55,7 +55,9 @@ namespace CannonMonke
         float verticalVelocity;
 
         Vector3 movement;
-        Vector3 pushRayOffset = new(0f, 1f, 0f);
+        Vector3 pushRayOffset = new(0f, 0.5f, 0f);
+
+        bool IsInCannonMode;
 
         List<Timer> timers;
 
@@ -78,6 +80,7 @@ namespace CannonMonke
         void Awake()
         {
             mainCamera = Camera.main.transform;
+            IsInCannonMode = false;
 
             cinemachineCamera.Follow = transform;
             cinemachineCamera.LookAt = transform;
@@ -152,6 +155,7 @@ namespace CannonMonke
             var holdingLocomotionState = new HoldingLocomotionState(this, animator);
             var holdingThrowState = new HoldingThrowState(this, animator);
             var pushState = new PushState(this, animator);
+            var cannonModeState = new CannonModeState(this, animator);
 
             // Define transitions
             At(locomotionState, jumpState,
@@ -168,19 +172,23 @@ namespace CannonMonke
 
             At(locomotionState, emoteState,
                 new FuncPredicate(() => emoteTimer.IsRunning
-                && groundChecker.isGrounded));
+                && groundChecker.IsGrounded));
+
+            Any(cannonModeState,
+                new FuncPredicate(() => IsInCannonMode));
 
             Any(fallingState,
-                new FuncPredicate(() => !groundChecker.isGrounded
+                new FuncPredicate(() => !groundChecker.IsGrounded
                 && rb.linearVelocity.y < minFallVelocity));
 
             Any(locomotionState,
-                new FuncPredicate(() => groundChecker.isGrounded
+                new FuncPredicate(() => groundChecker.IsGrounded
                 && !jumpTimer.IsRunning
                 && !emoteTimer.IsRunning
                 && !throwObjectTimer.IsRunning
                 && !objectHolding.isHolding
-                && !pushTimer.IsRunning));
+                && !pushTimer.IsRunning
+                && !IsInCannonMode));
 
             // Set initial state
             stateMachine.SetState(locomotionState);
@@ -217,7 +225,10 @@ namespace CannonMonke
             if (Physics.Raycast(ray, out RaycastHit hitInfo, pushDistance))
             {
                 Debug.Log("Hit: " + hitInfo.collider.gameObject.name);
-                if (hitInfo.collider.CompareTag("Crate"))
+                if (hitInfo.collider.CompareTag("Crate") 
+                    || hitInfo.collider.CompareTag("Banana")
+                    || hitInfo.collider.CompareTag("Racoon")
+                    )
                 {
                     hitInfo.collider.GetComponent<Rigidbody>()
                         .AddForce(transform.forward * pushForce, ForceMode.Impulse);
@@ -230,7 +241,7 @@ namespace CannonMonke
             if (performed
                 && !jumpTimer.IsRunning
                 && !emoteTimer.IsRunning
-                && groundChecker.isGrounded)
+                && groundChecker.IsGrounded)
             {
                 jumpTimer.Start();
             }
@@ -241,7 +252,7 @@ namespace CannonMonke
             if (performed 
                 && !interactTimer.IsRunning
                 && !interactCooldownTimer.IsRunning
-                && groundChecker.isGrounded)
+                && groundChecker.IsGrounded)
             {
                 interactTimer.Start();
             }
@@ -249,7 +260,7 @@ namespace CannonMonke
             {
                 interactTimer.Stop();
             }
-            else if (interactTimer.IsRunning && !groundChecker.isGrounded)
+            else if (interactTimer.IsRunning && !groundChecker.IsGrounded)
             {
                 interactTimer.Stop();
             }
@@ -277,7 +288,7 @@ namespace CannonMonke
             if (performed
                 && !emoteTimer.IsRunning
                 && !emoteCooldownTimer.IsRunning
-                && groundChecker.isGrounded)
+                && groundChecker.IsGrounded)
             {
                 emoteTimer.Start();
             }
@@ -321,7 +332,7 @@ namespace CannonMonke
         public void HandleGravity()
         {
             // If not jumping and grounded, keep jump velocity at 0
-            if (!jumpTimer.IsRunning && groundChecker.isGrounded)
+            if (!jumpTimer.IsRunning && groundChecker.IsGrounded)
             {
                 verticalVelocity = Zerof;
                 return;
@@ -404,6 +415,19 @@ namespace CannonMonke
                 value, 
                 ref velocity, 
                 smoothTime);
+        }
+
+        public bool PlayerEnterCannonMode(bool state, CannonController currentCannon)
+        {
+            if (currentCannon != null)
+            {
+                currentCannon.EnterCannonMode(cinemachineCamera);
+                return IsInCannonMode = state;
+            }
+            else
+            {
+                return IsInCannonMode = false;
+            }
         }
     }
 }

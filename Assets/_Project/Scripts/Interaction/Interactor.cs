@@ -9,7 +9,7 @@ namespace CannonMonke
         [Header("Interact Settings")]
         [SerializeField] float interactRange = 3f;
         [SerializeField] bool isDebugging;
-        [SerializeField] Vector3 rayPositionOffset = new(0f, 1f, 0f);
+        [SerializeField] Vector3 rayPositionOffset = new(0f, 0.5f, 0f);
 
         void Start()
         {

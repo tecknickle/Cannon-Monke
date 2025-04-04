@@ -8,6 +8,9 @@ TagManager:
   - Moving Platform
   - Crate
   - Collectible
+  - Banana
+  - Racoon
+  - Cannon
   layers:
   - Default
   - TransparentFX

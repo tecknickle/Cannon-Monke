@@ -5,21 +5,21 @@ namespace CannonMonke
     public class GroundChecker : MonoBehaviour
     {
         [Header("Ground Check Settings")]
-        [SerializeField] float groundDistance = 0.04f;
+        [SerializeField] float groundDistance = 1f;
+        [SerializeField] Vector3 rayOriginOffset = new(0f, 0.5f, 0f);
         [SerializeField] LayerMask groundLayers;
 
-        public bool isGrounded {  get; private set; }
+        public bool IsGrounded {  get; private set; }
 
         void Update()
         {
-            isGrounded = Physics.SphereCast(
-                transform.position,
-                groundDistance,
-                Vector3.down,
-                out _,
-                groundDistance,
-                groundLayers
-                );
+            IsGrounded = Physics.Raycast(transform.position + rayOriginOffset, Vector3.down, groundDistance);
+
+            Debug.DrawRay(
+                transform.position, 
+                Vector3.down * groundDistance, 
+                IsGrounded ? Color.green : Color.red);
+     
         }
     }
 }
