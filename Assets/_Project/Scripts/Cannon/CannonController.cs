@@ -9,8 +9,12 @@ namespace CannonMonke
     public partial class CannonController : ValidatedMonoBehaviour, IInteractable
     {
         [Header("References")]
+        [SerializeField, Self] CannonLoadingHandler loadingHandler;
         [SerializeField, Anywhere] Transform cannonBarrel;
         [SerializeField, Anywhere] Transform cannonBase;
+
+        [Header("Cannon Firing Settings")]
+        [SerializeField] float cannonFiringForce = 20f;
 
         [Header("Aiming Settings")]
         [SerializeField] float xAxisRotationSpeed = 100f;
@@ -86,8 +90,16 @@ namespace CannonMonke
 
         public void FireCannon()
         {
-            // fire cannon logic
-            Debug.Log("Firing cannon!");
+            Debug.Log("Trying to Fire Cannon...");
+            if (loadingHandler.IsCannonLoaded)
+            {
+                loadingHandler.FireTheObject(cannonFiringForce);
+                Debug.Log("Firing cannon!");
+            }
+            else
+            {
+                Debug.Log("Cannon is not loaded, cannot fire.");
+            }
             ExitCannonMode();
         }
 
