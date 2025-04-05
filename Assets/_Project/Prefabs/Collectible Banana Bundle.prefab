@@ -248,6 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreCollisionDuration: 1
+  coroutineStartOffset: {x: 0, y: 5, z: 0}
 --- !u!1001 &6414688138805393922
 PrefabInstance:
   m_ObjectHideFlags: 0

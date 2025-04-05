@@ -549,8 +549,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 546223ef7cee2834ba48aa2c834fb6a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingHandler: {fileID: 302374457}
   cannonBarrel: {fileID: 303741198}
   cannonBase: {fileID: 303741197}
+  cannonCameraTarget: {fileID: 542138176}
+  cannonFiringForce: 20
   xAxisRotationSpeed: 100
   yAxisRotationSpeed: 100
   interpolationSpeed: 20
@@ -582,11 +585,6 @@ CapsuleCollider:
   m_Height: 5.5
   m_Direction: 0
   m_Center: {x: 0, y: -2, z: -5}
---- !u!4 &302374456 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
-  m_PrefabInstance: {fileID: 303741196}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &302374457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,7 +694,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+    - targetCorrespondingSourceObject: {fileID: -3416400609385885712, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 542138176}
     m_AddedComponents:
@@ -1155,6 +1153,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0d243bc3fc1004db91532cd5b3c529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &509679262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509679254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61ee7cc3a3f68f49b59b7c6b58db0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreCollisionDuration: 1
+  coroutineStartOffset: {x: 0, y: 6, z: 0}
 --- !u!1 &542138175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1185,7 +1197,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 302374456}
+  m_Father: {fileID: 303741198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &542138177
 CapsuleCollider:
@@ -2044,6 +2056,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f658f44a18e3ce4887b2d4263f7eb93, type: 3}
       insertIndex: -1
       addedObject: {fileID: 509679259}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f658f44a18e3ce4887b2d4263f7eb93, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 509679262}
   m_SourcePrefab: {fileID: 100100000, guid: 4f658f44a18e3ce4887b2d4263f7eb93, type: 3}
 --- !u!1 &1079740800 stripped
 GameObject:

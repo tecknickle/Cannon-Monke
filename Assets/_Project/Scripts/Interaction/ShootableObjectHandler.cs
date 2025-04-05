@@ -1,12 +1,17 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using System.Collections;
+using UnityEngine;
 using Utilities;
 
 namespace CannonMonke
 {
     public class ShootableObjectHandler : MonoBehaviour, IShootable
     {
-        [Header("Kinematic Duration")]
+        [Header("Shootable Settings")]
         [SerializeField] float ignoreCollisionDuration = 1f;
+        // This offset is used to move the object into the cannon when it is loaded
+        [SerializeField] Vector3 coroutineStartOffset = new(0f, 5f, 0f);
+
 
         Transform currentCannonLoadPosition;
         Rigidbody rb;
@@ -63,7 +68,7 @@ namespace CannonMonke
 
         void OnCollisionExit(Collision other)
         {
-            // no op
+            // no op for now
         }
 
         public void GetIntoCannon(Transform designatedLoadedPosition)
@@ -71,11 +76,35 @@ namespace CannonMonke
             Debug.Log("Cannon is letting object in: " + this.name);
             currentCannonLoadPosition = designatedLoadedPosition;
 
-            transform.SetPositionAndRotation(
-                designatedLoadedPosition.position, 
-                designatedLoadedPosition.rotation);
+            StartCoroutine(MoveObjectIntoCannon(0.5f));
 
             rb.isKinematic = true; // Prevent physics while in cannon
+        }
+
+        IEnumerator MoveObjectIntoCannon(float time)
+        {
+            Vector3 startPosition = currentCannonLoadPosition.position
+                + coroutineStartOffset;
+
+            Quaternion startRotation = transform.rotation;
+
+            float elapsedTime = 0f;
+
+            while(elapsedTime < time)
+            {
+                transform.SetPositionAndRotation(
+                    (Vector3.Lerp(
+                    startPosition,
+                    currentCannonLoadPosition.position,
+                    elapsedTime)),
+                    (Quaternion.Lerp(
+                    startRotation,
+                    currentCannonLoadPosition.rotation,
+                    elapsedTime)));
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         }
 
         public void GetLaunchedFromCannon(Vector3 direction, float force)

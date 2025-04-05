@@ -1,4 +1,6 @@
 using KBCore.Refs;
+using System.Collections;
+using System.Threading;
 using System.Transactions;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
@@ -12,6 +14,7 @@ namespace CannonMonke
         [SerializeField, Self] CannonLoadingHandler loadingHandler;
         [SerializeField, Anywhere] Transform cannonBarrel;
         [SerializeField, Anywhere] Transform cannonBase;
+        [SerializeField, Anywhere] Transform cannonCameraTarget;
 
         [Header("Cannon Firing Settings")]
         [SerializeField] float cannonFiringForce = 20f;
@@ -76,7 +79,6 @@ namespace CannonMonke
                 upperLimitInDegrees, 
                 lowerLimitInDegrees); // Clamp vertical rotation
 
-
             cannonBarrel.transform.localRotation = Quaternion.Slerp(
                 cannonBarrel.transform.localRotation,
                 Quaternion.Euler(xAxisRotation, yAxisRotation, Zerof),
@@ -95,12 +97,13 @@ namespace CannonMonke
             {
                 loadingHandler.FireTheObject(cannonFiringForce);
                 Debug.Log("Firing cannon!");
+                StartCoroutine(ExitCannonModeAfterDelay(1f));
             }
             else
             {
                 Debug.Log("Cannon is not loaded, cannot fire.");
+                ExitCannonMode();
             }
-            ExitCannonMode();
         }
 
         public void EnterCannonMode(CinemachineCamera camera, InputReader input)
@@ -114,8 +117,8 @@ namespace CannonMonke
                 currentInputReader = input;
 
                 currentCamera = camera;
-                camera.LookAt = transform; // Set the camera to look at the cannon
-                camera.Follow = transform;
+                camera.LookAt = cannonCameraTarget; // Set the camera to look at the cannon
+                camera.Follow = cannonCameraTarget;
             }
         }
 
@@ -133,8 +136,42 @@ namespace CannonMonke
             // reset cannon position/orientation to parents'
             xAxisRotation = Zerof; // Reset x-axis rotation
             yAxisRotation = Zerof; // Reset y-axis rotation
-            cannonBarrel.transform.localRotation = Quaternion.Euler(0f, 0f, 0f); // Reset barrel rotation to default
-            cannonBase.transform.localRotation = Quaternion.Euler(0f, 0f, 0f); // Reset base rotation to default
+
+            StartCoroutine(ResetCannonRotationAfterDelay(1f));
+        }
+
+        IEnumerator ExitCannonModeAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ExitCannonMode();
+        }
+
+        IEnumerator ResetCannonRotationAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            Quaternion barrelStartRotation = cannonBarrel.transform.localRotation;
+            Quaternion baseStartRotation = cannonBase.transform.localRotation;
+
+            float elapsedTime = 0f;
+
+            while(elapsedTime < 1f)
+            {
+                cannonBarrel.transform.localRotation = Quaternion.Slerp(
+                    barrelStartRotation,
+                    Quaternion.identity, // Reset to default rotation
+                    elapsedTime);
+
+                cannonBase.transform.localRotation = Quaternion.Slerp(
+                    baseStartRotation,
+                    Quaternion.identity, // Reset to default rotation
+                    elapsedTime);
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            cannonBarrel.transform.localRotation = Quaternion.identity;
+            cannonBase.transform.localRotation = Quaternion.identity; // Ensure final rotation is set to identity
         }
 
         public void Interact(Transform interactor)
