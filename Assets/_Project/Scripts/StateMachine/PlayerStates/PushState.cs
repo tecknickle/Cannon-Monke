@@ -8,7 +8,7 @@ namespace CannonMonke
 
         public override void OnEnter()
         {
-            Debug.Log("On Enter Push State");
+            //Debug.Log("On Enter Push State");
             animator.CrossFade(PushHash, shortCrossFadeDuration);
             player.Push();
         }

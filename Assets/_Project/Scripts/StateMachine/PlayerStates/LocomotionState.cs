@@ -8,7 +8,7 @@ namespace CannonMonke
 
         public override void OnEnter()
         {
-            Debug.Log("On Enter Locomotion State");
+            //Debug.Log("On Enter Locomotion State");
             animator.CrossFade(LocomotionHash, crossFadeDuration);
         }
 

@@ -8,7 +8,7 @@ namespace CannonMonke
 
         public override void OnEnter()
         {
-            Debug.Log("On Enter Emote State");
+            //Debug.Log("On Enter Emote State");
             animator.CrossFade(Emote1Hash, crossFadeDuration);
         }
 

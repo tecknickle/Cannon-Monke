@@ -37,7 +37,7 @@ namespace CannonMonke
 
         public virtual void OnExit()
         {
-            Debug.Log("On Exit Base State");
+            //Debug.Log("On Exit Base State");
         }
 
         public virtual void Update()

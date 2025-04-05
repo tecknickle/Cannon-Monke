@@ -8,7 +8,7 @@ namespace CannonMonke
 
         public override void OnEnter()
         {
-            Debug.Log("On Enter Jump State");
+            //Debug.Log("On Enter Jump State");
             animator.CrossFade(JumpHash, crossFadeDuration);
         }
 

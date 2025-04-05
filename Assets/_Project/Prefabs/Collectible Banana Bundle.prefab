@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6636825122210303435}
   - component: {fileID: -4603881407803524737}
   - component: {fileID: -2796909021539789563}
+  - component: {fileID: -4172238262242640856}
   m_Layer: 0
   m_Name: Collectible Banana Bundle
   m_TagString: Banana
@@ -234,6 +235,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a266a36b3ed74648913a83c72c3e453, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-4172238262242640856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4690460393811357640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c61ee7cc3a3f68f49b59b7c6b58db0e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ignoreCollisionDuration: 1
 --- !u!1001 &6414688138805393922
 PrefabInstance:
   m_ObjectHideFlags: 0

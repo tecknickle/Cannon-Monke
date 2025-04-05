@@ -40,6 +40,9 @@ namespace CannonMonke
         [SerializeField] float pushDistance = 2f;
         [SerializeField] float pushCooldown = 0.3f;
 
+        [Header("Cannon Mode Settings")]
+        [SerializeField] float cannonFireCooldown = 1f;
+
         [Header("Other Settings")]
         [SerializeField] float interactDuration = 5f;
         [SerializeField] float interactCooldown = 0.5f;
@@ -72,6 +75,7 @@ namespace CannonMonke
 
         CountdownTimer throwObjectTimer;
         CountdownTimer pushTimer;
+        CountdownTimer cannonFireTimer;
 
         StateMachine stateMachine;
         
@@ -111,6 +115,7 @@ namespace CannonMonke
 
             throwObjectTimer = new CountdownTimer(throwCooldown);
             pushTimer = new CountdownTimer(pushCooldown);
+            cannonFireTimer = new CountdownTimer(cannonFireCooldown);
 
             timers = new(7) {
                 jumpTimer,
@@ -119,7 +124,8 @@ namespace CannonMonke
                 throwObjectTimer,
                 emoteTimer,
                 emoteCooldownTimer,
-                pushTimer
+                pushTimer,
+                cannonFireTimer
             };
 
             jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
@@ -128,7 +134,7 @@ namespace CannonMonke
 
             interactTimer.OnTimerStop += () =>
             {
-                if (objectHolding.isHolding) objectHolding.DropObject(dropForce);
+                if (objectHolding.IsHolding) objectHolding.DropObject(dropForce);
                 interactCooldownTimer.Start();
             };
 
@@ -142,6 +148,8 @@ namespace CannonMonke
             };
 
             pushTimer.OnTimerStart += () => movement = Vector3.zero;
+
+            cannonFireTimer.OnTimerStart += () => currentCannon.FireCannon();
         }
         
         void SetupStatemachine()
@@ -164,7 +172,7 @@ namespace CannonMonke
                 new FuncPredicate(() => jumpTimer.IsRunning));
 
             At(locomotionState, holdingLocomotionState,
-                new FuncPredicate(() => objectHolding.isHolding));
+                new FuncPredicate(() => objectHolding.IsHolding));
 
             At(holdingLocomotionState, holdingThrowState,
                 new FuncPredicate(() => throwObjectTimer.IsRunning));
@@ -173,8 +181,7 @@ namespace CannonMonke
                 new FuncPredicate(() => pushTimer.IsRunning));
 
             At(locomotionState, emoteState,
-                new FuncPredicate(() => emoteTimer.IsRunning
-                && groundChecker.IsGrounded));
+                new FuncPredicate(() => emoteTimer.IsRunning));
 
             Any(cannonModeState,
                 new FuncPredicate(() => IsInCannonMode));
@@ -184,18 +191,31 @@ namespace CannonMonke
                 && rb.linearVelocity.y < minFallVelocity));
 
             Any(locomotionState,
-                new FuncPredicate(() => groundChecker.IsGrounded
-                && !jumpTimer.IsRunning
-                && !emoteTimer.IsRunning
-                && !throwObjectTimer.IsRunning
-                && !objectHolding.isHolding
-                && !pushTimer.IsRunning
-                && !IsInCannonMode));
+                new FuncPredicate(() => IsLocomotionState()));
 
             // Set initial state
             stateMachine.SetState(locomotionState);
         }
-        
+
+        bool IsLocomotionState()
+        {
+            if (groundChecker.IsGrounded
+                && !jumpTimer.IsRunning
+                && !emoteTimer.IsRunning
+                && !throwObjectTimer.IsRunning
+                && !objectHolding.IsHolding
+                && !pushTimer.IsRunning
+                && !IsInCannonMode
+                )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         void At(IState from, IState to, 
             IPredicate condition) => stateMachine.AddTransition(from, to, condition);
 
@@ -226,7 +246,7 @@ namespace CannonMonke
             
             if (Physics.Raycast(ray, out RaycastHit hitInfo, pushDistance))
             {
-                Debug.Log("Hit: " + hitInfo.collider.gameObject.name);
+                //Debug.Log("Hit: " + hitInfo.collider.gameObject.name);
                 if (hitInfo.collider.CompareTag("Crate") 
                     || hitInfo.collider.CompareTag("Banana")
                     || hitInfo.collider.CompareTag("Racoon")
@@ -269,18 +289,23 @@ namespace CannonMonke
         }
 
         void OnFire(bool performed)
-        {
+        {   
             if (performed
-                && !throwObjectTimer.IsRunning
-                && objectHolding.isHolding)
+                && IsInCannonMode)
             {
-                throwObjectTimer.Start();
+                cannonFireTimer.Start();
             }
             else if (performed 
-                && !objectHolding.isHolding
+                && !objectHolding.IsHolding
                 && !pushTimer.IsRunning)
             {
                 pushTimer.Start();
+            }
+            else if (performed
+                && !throwObjectTimer.IsRunning
+                && objectHolding.IsHolding)
+            {
+                throwObjectTimer.Start();
             }
         }
 
@@ -420,7 +445,7 @@ namespace CannonMonke
             {
                 rb.linearVelocity = Vector3.zero; // Stop player movement when entering cannon mode
                 currentCannon = cannon;
-                // Pass camera component to cannon controller
+                // Pass camera and inputReader component to cannon controller
                 cannon.EnterCannonMode(cinemachineCamera, inputReader);
                 return IsInCannonMode = state;
             }

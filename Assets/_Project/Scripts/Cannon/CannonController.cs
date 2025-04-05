@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CannonMonke
 {
-    public class CannonController : ValidatedMonoBehaviour, IInteractable
+    public partial class CannonController : ValidatedMonoBehaviour, IInteractable
     {
         [Header("References")]
         [SerializeField, Anywhere] Transform cannonBarrel;
@@ -52,8 +52,13 @@ namespace CannonMonke
 
         public void HandleAimingRotation()
         {
-            float xAxisRotationInput = currentInputReader.Direction.y * xAxisRotationSpeed * Time.deltaTime;
-            float yAxisRotationInput = currentInputReader.Direction.x * yAxisRotationSpeed * Time.deltaTime;
+            float xAxisRotationInput = 
+                currentInputReader.Direction.y 
+                * xAxisRotationSpeed * Time.deltaTime;
+
+            float yAxisRotationInput = 
+                currentInputReader.Direction.x 
+                * yAxisRotationSpeed * Time.deltaTime;
 
             yAxisRotation += yAxisRotationInput;
             yAxisRotation = Mathf.Clamp(
@@ -75,11 +80,16 @@ namespace CannonMonke
 
             cannonBase.transform.localRotation = Quaternion.Slerp(
                 cannonBase.transform.localRotation,
-                Quaternion.Euler(0f, yAxisRotation, Zerof), // Only rotate the base horizontally
+                Quaternion.Euler(Zerof, yAxisRotation, Zerof), // Only rotate the base horizontally
                 interpolationSpeed * Time.deltaTime);
         }
 
-        // Fire();
+        public void FireCannon()
+        {
+            // fire cannon logic
+            Debug.Log("Firing cannon!");
+            ExitCannonMode();
+        }
 
         public void EnterCannonMode(CinemachineCamera camera, InputReader input)
         {

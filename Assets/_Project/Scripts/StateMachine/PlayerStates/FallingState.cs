@@ -8,7 +8,7 @@ namespace CannonMonke
 
         public override void OnEnter()
         {
-            Debug.Log("Enter Falling State");
+            //Debug.Log("Enter Falling State");
             animator.CrossFade(FallingHash, longCrossFadeDuration);
         }
 

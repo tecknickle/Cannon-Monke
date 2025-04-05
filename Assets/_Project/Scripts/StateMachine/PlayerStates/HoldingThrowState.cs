@@ -8,7 +8,7 @@ namespace CannonMonke
 
         public override void OnEnter()
         {
-            Debug.Log("On Enter Holding Throw State.");
+            //Debug.Log("On Enter Holding Throw State.");
             animator.CrossFade(HoldingThrowHash, shortCrossFadeDuration);
         }
     }

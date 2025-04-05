@@ -11,11 +11,11 @@ namespace CannonMonke
         const float DefaultDropForce = 1f;
 
         IHoldable heldObject;
-        public bool isHolding;
+        public bool IsHolding;
 
         void Awake()
         {
-            isHolding = false;
+            IsHolding = false;
         }
 
         public void PickUpObject(IHoldable objectToHold)
@@ -35,7 +35,7 @@ namespace CannonMonke
                 heldObject = objectToHold;
                 heldObject.Pickup(holdingPosition.transform);
             }
-            isHolding = true;
+            IsHolding = true;
         }
 
         // Used methods in PlayerController
@@ -47,7 +47,7 @@ namespace CannonMonke
                 heldObject.Throw(holdingPosition.transform.forward, dropForce);
                 heldObject = null;
             }
-            isHolding = false;
+            IsHolding = false;
         }
 
         public void ThrowObject(float throwForce)
@@ -57,7 +57,7 @@ namespace CannonMonke
                 heldObject.Throw(holdingPosition.transform.up + transform.forward, throwForce);
                 heldObject = null;
             }
-            isHolding = false;
+            IsHolding = false;
         }
     }
 }

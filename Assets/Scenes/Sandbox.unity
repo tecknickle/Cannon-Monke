@@ -419,6 +419,7 @@ MonoBehaviour:
   pushForce: 10
   pushDistance: 2
   pushCooldown: 0.3
+  cannonFireCooldown: 1
   interactDuration: 3
   interactCooldown: 0.5
   emoteDuration: 8
@@ -530,7 +531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holdingPosition: {fileID: 914379517}
-  isHolding: 0
+  IsHolding: 0
 --- !u!1 &302374452 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
@@ -550,8 +551,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cannonBarrel: {fileID: 303741198}
   cannonBase: {fileID: 303741197}
-  horizontalRotationSpeed: 100
-  verticalRotationSpeed: 100
+  xAxisRotationSpeed: 100
+  yAxisRotationSpeed: 100
+  interpolationSpeed: 20
+  upperLimitInDegrees: 1
+  lowerLimitInDegrees: 60
+  leftLimitInDegrees: -45
+  rightLimitInDegrees: 45
   positionOffset: {x: 0, y: -2, z: -6}
 --- !u!136 &302374455
 CapsuleCollider:
@@ -576,6 +582,25 @@ CapsuleCollider:
   m_Height: 5.5
   m_Direction: 0
   m_Center: {x: 0, y: -2, z: -5}
+--- !u!4 &302374456 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+  m_PrefabInstance: {fileID: 303741196}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &302374457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302374452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b08000ccb105f49a8b34fc4fec66c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadedPosition: {fileID: 303741198}
+  IsCannonLoaded: 0
 --- !u!1001 &303741196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -670,14 +695,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 542138176}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 302374455}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 302374454}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 302374455}
+      addedObject: {fileID: 302374457}
     - targetCorrespondingSourceObject: {fileID: -3133498875991405556, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1079740804}
@@ -1124,6 +1155,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0d243bc3fc1004db91532cd5b3c529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &542138175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 542138176}
+  - component: {fileID: 542138177}
+  m_Layer: 0
+  m_Name: CannonLoadingZone
+  m_TagString: CannonLoadingZone
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &542138176
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542138175}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 302374456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &542138177
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542138175}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3
+  m_Height: 10
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &563396139
 GameObject:
   m_ObjectHideFlags: 0
