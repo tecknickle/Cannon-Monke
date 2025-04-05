@@ -17,6 +17,15 @@ namespace CannonMonke
         void Update()
         {
             ignoreCollisionTimer.Tick(Time.deltaTime);
+
+            if (currentCannonLoadPosition != null)
+            {
+                currentCannonLoadPosition.GetPositionAndRotation(
+                    out Vector3 position,
+                    out Quaternion rotation);
+
+                transform.SetPositionAndRotation(position, rotation);
+            }
         }
 
         void Awake()
@@ -54,10 +63,7 @@ namespace CannonMonke
 
         void OnCollisionExit(Collision other)
         {
-            if (other.collider.CompareTag("CannonLoadingZone"))
-            {
-                currentCannonLoadPosition = null;
-            }
+            // no op
         }
 
         public void GetIntoCannon(Transform designatedLoadedPosition)
