@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace CannonMonke
 {
-    public partial class CannonController : ValidatedMonoBehaviour, IInteractable
+    public class CannonController : ValidatedMonoBehaviour, IInteractable
     {
         [Header("References")]
         [SerializeField, Self] CannonLoadingHandler loadingHandler;
@@ -35,7 +35,6 @@ namespace CannonMonke
 
         PlayerController currentPlayer;
         InputReader currentInputReader;
-        CinemachineCamera currentCamera;
 
         const float Zerof = 0f;
 
@@ -46,7 +45,6 @@ namespace CannonMonke
         {
             currentPlayer = null;
             currentInputReader = null;
-            currentCamera = null;
         }
 
         void Update()
@@ -106,7 +104,7 @@ namespace CannonMonke
             }
         }
 
-        public void EnterCannonMode(CinemachineCamera camera, InputReader input)
+        public void EnterCannonMode(InputReader input)
         {
             if (currentPlayer != null)
             {
@@ -115,18 +113,13 @@ namespace CannonMonke
                     transform.rotation);
 
                 currentInputReader = input;
-
-                currentCamera = camera;
-                camera.LookAt = cannonCameraTarget; // Set the camera to look at the cannon
-                camera.Follow = cannonCameraTarget;
+                CameraManager.Instance.SetTarget(cannonCameraTarget);
             }
         }
 
         public void ExitCannonMode()
         {
-            currentCamera.LookAt = currentPlayer.transform;
-            currentCamera.Follow = currentPlayer.transform;
-            currentCamera = null;
+            CameraManager.Instance.ReturnToDefault();
 
             currentInputReader = null;
 

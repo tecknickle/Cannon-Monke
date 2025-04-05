@@ -9,14 +9,21 @@ namespace CannonMonke
 {
     public class CameraManager : ValidatedMonoBehaviour
     {
+        public static CameraManager Instance { get; private set; }
+
         [Header("References")]
+        [SerializeField, Anywhere] Transform defaultTarget;
         [SerializeField, Anywhere] InputReader inputReader;
-        [SerializeField, Anywhere] CinemachineOrbitalFollow cinemachineCamera;
+        [SerializeField, Anywhere] CinemachineOrbitalFollow cinemachineCameraOrbital;
+        [SerializeField, Anywhere] CinemachineCamera cinemachineCamera;
 
         [Header("Camera Control Settings")]
         [SerializeField, Range(0, 5)] float cameraSensitivity = 1f;
 
+        Transform currentTarget;
         bool cameraMovementLock;
+
+        public Transform CurrentTarget => currentTarget;
 
         void OnEnable()
         {
@@ -28,14 +35,38 @@ namespace CannonMonke
             inputReader.Look -= OnLook;
         }
 
-        private void Start()
+        void Awake()
+        {
+            // Singleton pattern
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            // Set initial target
+            if (defaultTarget != null)
+            {
+                SetTarget(defaultTarget);
+            }
+            else
+            {
+                Debug.LogError("Default target not set in CameraManager.");
+            }
+        }
+
+        void Start()
         {
             // Lock cursor to center of the screen and hide it
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
-        private void OnLook(Vector2 cameraMovement, bool isDeviceMouse)
+        void OnLook(Vector2 cameraMovement, bool isDeviceMouse)
         {
             if (cameraMovementLock) return;
 
@@ -43,11 +74,38 @@ namespace CannonMonke
             float deviceMultiplier = isDeviceMouse ? Time.fixedDeltaTime : Time.deltaTime;
 
             // Set camera axis values
-            cinemachineCamera.HorizontalAxis.Value += 
+            cinemachineCameraOrbital.HorizontalAxis.Value += 
                 cameraMovement.x * cameraSensitivity * deviceMultiplier;
 
-            cinemachineCamera.VerticalAxis.Value -= 
+            cinemachineCameraOrbital.VerticalAxis.Value -= 
                 cameraMovement.y * cameraSensitivity * deviceMultiplier;
+        }
+
+        public void SetTarget(Transform newTarget)
+        {
+            if (newTarget != null)
+            {
+                currentTarget = newTarget;
+                cinemachineCamera.Follow = newTarget;
+                cinemachineCamera.LookAt = newTarget;
+            }
+        }
+
+        public void ReturnToDefault()
+        {
+            SetTarget(defaultTarget);
+        }
+
+        public void ToggleBetweenDefaultAnd(Transform altTarget)
+        {
+            if (currentTarget == defaultTarget)
+            {
+                SetTarget(altTarget);
+            }
+            else
+            {
+                ReturnToDefault();
+            }
         }
     }
 }

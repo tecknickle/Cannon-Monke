@@ -66,11 +66,6 @@ namespace CannonMonke
             }
         }
 
-        void OnCollisionExit(Collision other)
-        {
-            // no op for now
-        }
-
         public void GetIntoCannon(Transform designatedLoadedPosition)
         {
             Debug.Log("Cannon is letting object in: " + this.name);
