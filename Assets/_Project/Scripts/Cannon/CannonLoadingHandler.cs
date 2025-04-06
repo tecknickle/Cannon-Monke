@@ -12,6 +12,15 @@ namespace CannonMonke
         public Transform loadedObjectTransform;
         public bool IsCannonLoaded;
 
+        void OnEnable()
+        {
+            Shootable.OnHitCannonLoadingZone += HandleOnHitCannonLoadingZone;
+        }
+        void OnDisable()
+        {
+            Shootable.OnHitCannonLoadingZone -= HandleOnHitCannonLoadingZone;
+        }
+
         void Awake()
         {
             IsCannonLoaded = false;
@@ -19,7 +28,17 @@ namespace CannonMonke
             loadedObjectTransform = null;
         }
 
-        public void LoadTheCannon(IShootable objectToLoad, Transform objectTransform)
+        void HandleOnHitCannonLoadingZone(Shootable newShootable, Transform newObject)
+        {
+            if (newShootable == null) return;
+            if (!IsCannonLoaded) LoadTheCannon(newShootable, newObject);
+            else
+            {
+                Debug.Log("Cannon already loaded, ignoring additional hit.");
+            }
+        }
+
+        void LoadTheCannon(IShootable objectToLoad, Transform objectTransform)
         {
             if (objectToFire != null)
             {

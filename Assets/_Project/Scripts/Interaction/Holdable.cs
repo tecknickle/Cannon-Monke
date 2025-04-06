@@ -2,7 +2,7 @@
 
 namespace CannonMonke
 {
-    public class HoldableObjectHandler : MonoBehaviour, IInteractable, IHoldable
+    public class Holdable : MonoBehaviour, IInteractable, IHoldable
     {
         Transform holder;
         Rigidbody rb;

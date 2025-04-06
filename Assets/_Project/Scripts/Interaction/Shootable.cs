@@ -1,17 +1,21 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using Utilities;
 
 namespace CannonMonke
 {
-    public class ShootableObjectHandler : MonoBehaviour, IShootable
+    public class Shootable : MonoBehaviour, IShootable
     {
         [Header("Shootable Settings")]
         [SerializeField] float ignoreCollisionDuration = 1f;
         [SerializeField] Vector3 coroutineStartOffset = new(0f, 5f, 0f);
         [SerializeField] float slideIntoCannonDuration = 0.2f;
 
+        // Transform is used for camera tracking active projectile in Cannon Controller
+        public static event Action<Shootable, Transform> OnHitCannonLoadingZone;
 
         Transform currentCannonLoadPosition;
         Rigidbody rb;
@@ -49,20 +53,7 @@ namespace CannonMonke
             if (other.collider.CompareTag("CannonLoadingZone"))
             {
                 Debug.Log("Object hit LZ: " + this.name);
-
-                CannonLoadingHandler cannon = 
-                    other.collider.GetComponentInParent<CannonLoadingHandler>();
-
-                if (cannon.IsCannonLoaded)
-                {
-                    Debug.Log("Cannon already loaded. Reject: " + this.name);
-                    return;
-                }
-                else
-                {
-                    Debug.Log("Sending Cannon to load" + this.name);
-                    cannon.LoadTheCannon(this, this.transform);
-                }
+                OnHitCannonLoadingZone?.Invoke(this, this.transform);
             }
         }
 

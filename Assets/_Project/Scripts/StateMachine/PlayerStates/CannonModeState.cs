@@ -10,7 +10,7 @@ namespace CannonMonke
         {
             Debug.Log("On Enter Cannon Mode State");
             // placeholder animation
-            animator.CrossFade(Emote1Hash, shortCrossFadeDuration);
+            animator.CrossFade(LocomotionHash, shortCrossFadeDuration);
         }
 
         public override void Update()
