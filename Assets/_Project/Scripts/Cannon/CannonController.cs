@@ -15,6 +15,7 @@ namespace CannonMonke
         [SerializeField, Anywhere] Transform cannonBarrel;
         [SerializeField, Anywhere] Transform cannonBase;
         [SerializeField, Anywhere] Transform cannonCameraTarget;
+        [SerializeField, Self] CinemachineImpulseSource impulseSource;
 
         [Header("Cannon Firing Settings")]
         [SerializeField] float cannonFiringForce = 20f;
@@ -95,6 +96,10 @@ namespace CannonMonke
             {
                 loadingHandler.FireTheObject(cannonFiringForce);
                 Debug.Log("Firing cannon!");
+                
+                SoundManager.PlaySound(SoundType.CannonFire, 1f);
+                impulseSource.GenerateImpulse();
+
                 StartCoroutine(ExitCannonModeAfterDelay(1f));
             }
             else

@@ -9,8 +9,8 @@ namespace CannonMonke
     {
         [Header("Shootable Settings")]
         [SerializeField] float ignoreCollisionDuration = 1f;
-        // This offset is used to move the object into the cannon when it is loaded
         [SerializeField] Vector3 coroutineStartOffset = new(0f, 5f, 0f);
+        [SerializeField] float slideIntoCannonDuration = 0.2f;
 
 
         Transform currentCannonLoadPosition;
@@ -71,7 +71,7 @@ namespace CannonMonke
             Debug.Log("Cannon is letting object in: " + this.name);
             currentCannonLoadPosition = designatedLoadedPosition;
 
-            StartCoroutine(MoveObjectIntoCannon(0.5f));
+            StartCoroutine(MoveObjectIntoCannon(slideIntoCannonDuration));
 
             rb.isKinematic = true; // Prevent physics while in cannon
         }
@@ -100,6 +100,10 @@ namespace CannonMonke
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+            // Ensure final position and rotation are set
+            transform.SetPositionAndRotation(
+                currentCannonLoadPosition.position,
+                currentCannonLoadPosition.rotation);
         }
 
         public void GetLaunchedFromCannon(Vector3 direction, float force)
