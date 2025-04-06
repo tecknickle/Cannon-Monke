@@ -36,6 +36,7 @@ namespace CannonMonke
 
         PlayerController currentPlayer;
         InputReader currentInputReader;
+        Transform activeProjectile;
 
         const float Zerof = 0f;
 
@@ -94,17 +95,25 @@ namespace CannonMonke
             Debug.Log("Trying to Fire Cannon...");
             if (loadingHandler.IsCannonLoaded)
             {
+                activeProjectile = loadingHandler.loadedObjectTransform;
                 loadingHandler.FireTheObject(cannonFiringForce);
+
                 Debug.Log("Firing cannon!");
                 
                 SoundManager.PlaySound(SoundType.CannonFire, 1f);
+
                 impulseSource.GenerateImpulse();
+                // TEMPORARY: will be changed to toggle between active and player
+                // ******************************************
+                //CameraManager.Instance.SetTarget(activeProjectile);
 
                 StartCoroutine(ExitCannonModeAfterDelay(1f));
             }
             else
             {
+                CameraManager.Instance.ReturnToDefault();
                 Debug.Log("Cannon is not loaded, cannot fire.");
+                SoundManager.PlaySound(SoundType.CannonDryFire, 1f);
                 ExitCannonMode();
             }
         }
@@ -124,16 +133,14 @@ namespace CannonMonke
 
         public void ExitCannonMode()
         {
-            CameraManager.Instance.ReturnToDefault();
-
             currentInputReader = null;
 
             currentPlayer.PlayerCannonMode(false, null);
             currentPlayer = null;
 
             // reset cannon position/orientation to parents'
-            xAxisRotation = Zerof; // Reset x-axis rotation
-            yAxisRotation = Zerof; // Reset y-axis rotation
+            xAxisRotation = Zerof;
+            yAxisRotation = Zerof;
 
             StartCoroutine(ResetCannonRotationAfterDelay(1f));
         }
@@ -141,12 +148,17 @@ namespace CannonMonke
         IEnumerator ExitCannonModeAfterDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
+            //TEMPORARY: will be changed to toggle between active and player
+            //*********************************************************
+            CameraManager.Instance.ReturnToDefault();
             ExitCannonMode();
         }
 
         IEnumerator ResetCannonRotationAfterDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
+
+            SoundManager.PlaySound(SoundType.CannonReset, 1f);
 
             Quaternion barrelStartRotation = cannonBarrel.transform.localRotation;
             Quaternion baseStartRotation = cannonBase.transform.localRotation;

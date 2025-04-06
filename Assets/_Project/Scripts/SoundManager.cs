@@ -7,7 +7,14 @@ namespace CannonMonke
     {
         Push,
         Landing,
+        Jump,
+        Throw,
+        Pickup,
+        Emote1,
         CannonFire,
+        CannonLoad,
+        CannonReset,
+        CannonDryFire
         // Add more sound types as needed
     }
 
@@ -28,6 +35,8 @@ namespace CannonMonke
         {
             audioSource = GetComponent<AudioSource>();
         }
+
+        
         public static void PlaySound(SoundType sound, float volume = 1)
         {
             AudioClip[] clips = instance.soundList[(int)sound].Sounds;
@@ -38,6 +47,7 @@ namespace CannonMonke
 #if UNITY_EDITOR
         private void OnEnable()
         {
+            // Ensure the enum names are synchronized with the soundList array in the editor
             string[] names = Enum.GetNames(typeof(SoundType));
             Array.Resize(ref soundList, names.Length);
             for (int i = 0; i < soundList.Length; i++)
@@ -49,6 +59,7 @@ namespace CannonMonke
     }
 
     [Serializable]
+    // Serializable struct to hold sound clips for each sound type
     public struct SoundList
     {
         public AudioClip[] Sounds { get => sounds; }

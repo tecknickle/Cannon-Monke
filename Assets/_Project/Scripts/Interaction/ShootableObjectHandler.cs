@@ -61,7 +61,7 @@ namespace CannonMonke
                 else
                 {
                     Debug.Log("Sending Cannon to load" + this.name);
-                    cannon.LoadTheCannon(this);
+                    cannon.LoadTheCannon(this, this.transform);
                 }
             }
         }
