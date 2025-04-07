@@ -149,7 +149,7 @@ namespace CannonMonke
 
             pushTimer.OnTimerStart += () => movement = Vector3.zero;
 
-            cannonFireTimer.OnTimerStart += () => currentCannon.FireCannon();
+            cannonFireTimer.OnTimerStart += () => currentCannon.PlayerFiringCannon();
         }
         
         void SetupStatemachine()
@@ -445,7 +445,6 @@ namespace CannonMonke
             {
                 rb.linearVelocity = Vector3.zero; // Stop player movement when entering cannon mode
                 currentCannon = cannon;
-                // Pass camera and inputReader component to cannon controller
                 cannon.EnterCannonMode(inputReader);
                 return IsInCannonMode = state;
             }

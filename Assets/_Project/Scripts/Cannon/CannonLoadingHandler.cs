@@ -15,10 +15,12 @@ namespace CannonMonke
         void OnEnable()
         {
             Shootable.OnHitCannonLoadingZone += HandleOnHitCannonLoadingZone;
+            CannonFiringHandler.OnFireCannon += FireTheObject;
         }
         void OnDisable()
         {
             Shootable.OnHitCannonLoadingZone -= HandleOnHitCannonLoadingZone;
+            CannonFiringHandler.OnFireCannon -= FireTheObject;
         }
 
         void Awake()
