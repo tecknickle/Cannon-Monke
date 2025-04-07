@@ -42,6 +42,7 @@ namespace CannonMonke
 
         [Header("Cannon Mode Settings")]
         [SerializeField] float cannonFireCooldown = 1f;
+        [SerializeField] float cameraSwitchCooldown = 1f;
 
         [Header("Other Settings")]
         [SerializeField] float interactDuration = 5f;
@@ -52,6 +53,7 @@ namespace CannonMonke
         const float Zerof = 0f;
 
         Transform mainCamera;
+        Transform playersActiveProjectile;
 
         float velocity;
         float currentSpeed;
@@ -77,8 +79,12 @@ namespace CannonMonke
         CountdownTimer pushTimer;
         CountdownTimer cannonFireTimer;
 
+        CountdownTimer cameraSwitchTimer;
+
         StateMachine stateMachine;
-        
+
+        public static event Action OnPlayerSwitchCameraRequested;
+
         // Animator parameters
         static readonly int Speed = Animator.StringToHash("Speed");
 
@@ -116,8 +122,9 @@ namespace CannonMonke
             throwObjectTimer = new CountdownTimer(throwCooldown);
             pushTimer = new CountdownTimer(pushCooldown);
             cannonFireTimer = new CountdownTimer(cannonFireCooldown);
+            cameraSwitchTimer = new CountdownTimer(cameraSwitchCooldown);
 
-            timers = new(7) {
+            timers = new(9) {
                 jumpTimer,
                 interactTimer,
                 interactCooldownTimer,
@@ -125,7 +132,8 @@ namespace CannonMonke
                 emoteTimer,
                 emoteCooldownTimer,
                 pushTimer,
-                cannonFireTimer
+                cannonFireTimer,
+                cameraSwitchTimer
             };
 
             jumpTimer.OnTimerStart += () => verticalVelocity = jumpForce;
@@ -150,6 +158,12 @@ namespace CannonMonke
             pushTimer.OnTimerStart += () => movement = Vector3.zero;
 
             cannonFireTimer.OnTimerStart += () => currentCannon.PlayerFiringCannon();
+
+            // Active projectile transform lives in Cannon Firing Handler
+            cameraSwitchTimer.OnTimerStart += () =>
+            {
+                OnPlayerSwitchCameraRequested?.Invoke();
+            };
         }
         
         void SetupStatemachine()
@@ -230,6 +244,7 @@ namespace CannonMonke
             inputReader.Interact += OnInteract;
             inputReader.Emote1 += OnEmote;
             inputReader.Jump += OnJump;
+            inputReader.SwitchCamera += OnSwitchCamera;
         }
 
         void OnDisable()
@@ -238,6 +253,7 @@ namespace CannonMonke
             inputReader.Interact -= OnInteract;
             inputReader.Emote1 -= OnEmote;
             inputReader.Jump -= OnJump;
+            inputReader.SwitchCamera -= OnSwitchCamera;
         }
 
         public void Push()
@@ -258,6 +274,13 @@ namespace CannonMonke
             }
         }
 
+        void OnSwitchCamera(bool performed)
+        {
+            if (performed && !cameraSwitchTimer.IsRunning)
+            {
+                cameraSwitchTimer.Start();
+            }
+        }
         void OnJump(bool performed)
         {
             if (performed

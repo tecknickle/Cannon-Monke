@@ -17,6 +17,7 @@ namespace CannonMonke
         public event UnityAction<bool> Fire = delegate {};
         public event UnityAction<bool> Interact = delegate {};
         public event UnityAction<bool> Emote1 = delegate {};
+        public event UnityAction<bool> SwitchCamera = delegate {};
 
         PlayerInputActions inputActions;
 
@@ -108,6 +109,19 @@ namespace CannonMonke
                     break;
                 case InputActionPhase.Canceled:
                     Emote1.Invoke(false);
+                    break;
+            }
+        }
+
+        public void OnSwitchCamera(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Started:
+                    SwitchCamera.Invoke(true);
+                    break;
+                case InputActionPhase.Canceled:
+                    SwitchCamera.Invoke(false);
                     break;
             }
         }

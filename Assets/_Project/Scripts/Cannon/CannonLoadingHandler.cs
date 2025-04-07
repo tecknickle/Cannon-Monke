@@ -6,10 +6,12 @@ namespace CannonMonke
     public class CannonLoadingHandler : MonoBehaviour 
     {
         [Header("Loaded Position")]
+        [SerializeField, Self] CannonFiringHandler firingHandler;
         [SerializeField, Anywhere] Transform loadedPosition;
 
         IShootable objectToFire;
-        public Transform loadedObjectTransform;
+        Transform loadedObjectTransform;
+        Transform lastFiredObject;
         public bool IsCannonLoaded;
 
         void OnEnable()
@@ -28,6 +30,7 @@ namespace CannonMonke
             IsCannonLoaded = false;
             objectToFire = null;
             loadedObjectTransform = null;
+            lastFiredObject = null;
         }
 
         void HandleOnHitCannonLoadingZone(Shootable newShootable, Transform newObject)
@@ -64,9 +67,12 @@ namespace CannonMonke
         {
             if (objectToFire != null)
             {
+                lastFiredObject = loadedObjectTransform;
                 objectToFire.GetLaunchedFromCannon(loadedPosition.transform.up, force);
-                objectToFire = null;
+                firingHandler.SetActiveProjectile(lastFiredObject);
                 loadedObjectTransform = null;
+                objectToFire = null;
+                
             }
             IsCannonLoaded = false;
         }

@@ -21,7 +21,6 @@ namespace CannonMonke
         [SerializeField] Vector3 positionOffset = new(0f, -2f, -6f);
 
         PlayerController currentPlayer;
-        Transform activeProjectile;
 
         const float Zerof = 0f;
 
@@ -77,11 +76,8 @@ namespace CannonMonke
         {
             // Cannon may or may not have been fired. Check if already reset first
             if (aimingHandler != null) aimingHandler.SetInputReader(null);
-
             currentPlayer.PlayerCannonMode(false, null);
             currentPlayer = null;
-            CameraManager.Instance.ReturnToDefault();
-
             aimingHandler.ResetCannonPosition();
             StartCoroutine(aimingHandler.ResetCannonRotationAfterDelay(1f));
         }
@@ -96,7 +92,6 @@ namespace CannonMonke
             // Cannon was fired, so lock cannon after firing by clearing input
             aimingHandler.SetInputReader(null);
             yield return new WaitForSeconds(delay);
-            CameraManager.Instance.ReturnToDefault();
             ExitCannonMode();
         }
     }

@@ -21,6 +21,16 @@ namespace CannonMonke
         public static event Action<float> OnFireCannon;
         public static event Action OnDryFireCannon;
 
+        void OnEnable()
+        {
+            PlayerController.OnPlayerSwitchCameraRequested += SwitchCamera;// Subscribe to events if needed
+        }
+
+        void OnDisable()
+        {
+            PlayerController.OnPlayerSwitchCameraRequested -= SwitchCamera; // Unsubscribe from events
+        }
+
         private void Awake()
         {
             activeProjectile = null;
@@ -31,17 +41,35 @@ namespace CannonMonke
             if (loadingHandler.IsCannonLoaded)
             {
                 OnFireCannon?.Invoke(cannonFiringForce);
-                activeProjectile = loadingHandler.loadedObjectTransform;
                 loadingHandler.FireTheObject(cannonFiringForce);
-
+                CameraManager.Instance.SetTarget(activeProjectile);
                 impulseSource.GenerateImpulse();
                 SoundManager.PlaySound(SoundType.CannonFire, 1f);
             }
             else
             {
                 OnDryFireCannon?.Invoke();
-                Debug.Log("Cannon is not loaded, cannot fire.");
+                CameraManager.Instance.ReturnToDefault();
                 SoundManager.PlaySound(SoundType.CannonDryFire, 1f);
+                Debug.Log("Cannon is not loaded, cannot fire.");
+            }
+        }
+
+        public void SetActiveProjectile(Transform projectile)
+        {
+            activeProjectile = projectile;
+        }
+
+        void SwitchCamera()
+        {
+            if (activeProjectile != null)
+            {
+                CameraManager.Instance.ToggleBetweenDefaultAnd(activeProjectile);
+            }
+            else
+            {
+                Debug.Log("No active projectile yet.");
+                return;
             }
         }
     }

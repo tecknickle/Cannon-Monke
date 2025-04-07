@@ -20,8 +20,8 @@ namespace CannonMonke
         [SerializeField] float leftLimitInDegrees = -45f;
         [SerializeField] float rightLimitInDegrees = 45f;
 
-        public float yAxisRotation;
-        public float xAxisRotation;
+        float yAxisRotation;
+        float xAxisRotation;
 
         InputReader currentInputReader;
 
@@ -49,7 +49,7 @@ namespace CannonMonke
             currentInputReader = inputReader;
         }
 
-        public void HandleAimingRotation()
+        void HandleAimingRotation()
         {
             float xAxisRotationInput =
                 currentInputReader.Direction.y
