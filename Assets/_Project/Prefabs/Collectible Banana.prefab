@@ -250,6 +250,8 @@ MonoBehaviour:
   ignoreCollisionDuration: 1
   coroutineStartOffset: {x: 0, y: 5, z: 0}
   slideIntoCannonDuration: 0.2
+  minRandomSpin: 3
+  maxRandomSpin: 7
 --- !u!1001 &5398102832315779483
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ namespace CannonMonke
         [SerializeField, Anywhere] Transform loadedPosition;
 
         [Header("SO Events")]
-        [SerializeField, Anywhere] FloatEventSO onCannonFired;
+        [SerializeField, Anywhere] FloatEventSO onCannonFiredChannel;
 
         IShootable objectToFire;
         Transform loadedObjectTransform;
@@ -20,12 +20,12 @@ namespace CannonMonke
         void OnEnable()
         {
             Shootable.OnHitCannonLoadingZone += HandleOnHitCannonLoadingZone;
-            onCannonFired.RegisterListener(FireTheObject);
+            onCannonFiredChannel.RegisterListener(FireTheObject);
         }
         void OnDisable()
         {
             Shootable.OnHitCannonLoadingZone -= HandleOnHitCannonLoadingZone;
-            onCannonFired.UnregisterListener(FireTheObject);
+            onCannonFiredChannel.UnregisterListener(FireTheObject);
         }
 
         void Awake()
@@ -62,7 +62,7 @@ namespace CannonMonke
                 IsCannonLoaded = true;
                 loadedObjectTransform = objectTransform; // Used for camera tracking
 
-                SoundManager.PlaySound(SoundType.CannonLoad, 1f);
+                SoundManager.PlaySound(SoundType.CannonLoad, 0.3f);
             }
         }
 

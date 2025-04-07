@@ -415,7 +415,7 @@ namespace CannonMonke
             // Debug.Log("vertical velocity: " + verticalVelocity);
         }
 
-         public void HandleMovement()
+        public void HandleMovement()
         {
             // Rotate movement direction to match camera rotation
             var adjustedDirection = Quaternion.AngleAxis(mainCamera.eulerAngles.y, Vector3.up) * movement;

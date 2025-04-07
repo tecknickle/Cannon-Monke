@@ -172,3 +172,5 @@ MonoBehaviour:
   ignoreCollisionDuration: 1
   coroutineStartOffset: {x: 0, y: 5, z: 0}
   slideIntoCannonDuration: 0.2
+  minRandomSpin: 3
+  maxRandomSpin: 7

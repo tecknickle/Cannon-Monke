@@ -1,8 +1,6 @@
-﻿using DG.Tweening;
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using Utilities;
 
 namespace CannonMonke
@@ -13,6 +11,8 @@ namespace CannonMonke
         [SerializeField] float ignoreCollisionDuration = 1f;
         [SerializeField] Vector3 coroutineStartOffset = new(0f, 5f, 0f);
         [SerializeField] float slideIntoCannonDuration = 0.2f;
+        [SerializeField] float minRandomSpin = 1f;
+        [SerializeField] float maxRandomSpin = 7f;
 
         // Transform is used for camera tracking active projectile in Cannon Controller
         public static event Action<Shootable, Transform> OnHitCannonLoadingZone;
@@ -103,7 +103,14 @@ namespace CannonMonke
             ignoreCollisionTimer.Start();
             rb.isKinematic = false;
             rb.AddForce(direction * force, ForceMode.Impulse);
+            AddRandomSpin();
             Debug.Log("I am being launched: " + this.name);
+        }
+
+        void AddRandomSpin()
+        {
+            float randomNumber = UnityEngine.Random.Range(minRandomSpin, maxRandomSpin);
+            rb.AddTorque(Vector3.right * randomNumber, ForceMode.Impulse);
         }
     }
 }

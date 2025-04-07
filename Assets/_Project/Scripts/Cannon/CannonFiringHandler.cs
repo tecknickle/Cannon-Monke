@@ -1,5 +1,4 @@
 ﻿using KBCore.Refs;
-using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ namespace CannonMonke
         [SerializeField, Anywhere] Transform cannonCameraTarget;
 
         [Header("SO Events")]
-        [SerializeField, Anywhere] FloatEventSO onCannonFired;
+        [SerializeField, Anywhere] FloatEventSO onCannonFiredChannel;
         [SerializeField, Anywhere] VoidEventSO onCannonDryFire;
 
         [Header("Cannon Firing Settings")]
@@ -42,7 +41,7 @@ namespace CannonMonke
         {
             if (loadingHandler.IsCannonLoaded)
             {
-                onCannonFired.Raise(cannonFiringForce);
+                onCannonFiredChannel.Raise(cannonFiringForce);
                 loadingHandler.FireTheObject(cannonFiringForce);
                 CameraManager.Instance.SetTarget(activeProjectile);
                 impulseSource.GenerateImpulse();

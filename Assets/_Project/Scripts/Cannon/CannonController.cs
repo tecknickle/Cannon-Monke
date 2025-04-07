@@ -1,9 +1,6 @@
 using KBCore.Refs;
 using System.Collections;
-using System.Threading;
-using System.Transactions;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CannonMonke
@@ -18,7 +15,7 @@ namespace CannonMonke
         [SerializeField, Anywhere] Transform cannonCameraTarget;
 
         [Header("SO Events")]
-        [SerializeField, Anywhere] FloatEventSO onCannonFired;
+        [SerializeField, Anywhere] FloatEventSO onCannonFiredChannel;
         [SerializeField, Anywhere] VoidEventSO onCannonDryFire;
 
         [Header("Settings")]
@@ -32,13 +29,13 @@ namespace CannonMonke
 
         void OnEnable()
         {
-            onCannonFired.RegisterListener(ExitCannonAfterDelay);
+            onCannonFiredChannel.RegisterListener(ExitCannonAfterDelay);
             onCannonDryFire.RegisterListener(ExitCannonMode);
         }
 
         void OnDisable()
         {
-            onCannonFired.UnregisterListener(ExitCannonAfterDelay);
+            onCannonFiredChannel.UnregisterListener(ExitCannonAfterDelay);
             onCannonDryFire.UnregisterListener(ExitCannonMode);
         }
 

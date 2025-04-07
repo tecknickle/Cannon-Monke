@@ -1,4 +1,5 @@
 ﻿using KBCore.Refs;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -24,6 +25,9 @@ namespace CannonMonke
         float xAxisRotation;
 
         InputReader currentInputReader;
+
+        // Used for smoking barrel VFX after firing
+        public static event Action OnCannonResetting;
 
         const float Zerof = 0f;
 
@@ -89,7 +93,9 @@ namespace CannonMonke
             Quaternion baseStartRotation = cannonBase.transform.localRotation;
 
             float elapsedTime = 0f;
-            SoundManager.PlaySound(SoundType.CannonReset, 1f);
+
+            OnCannonResetting?.Invoke();
+            SoundManager.PlaySound(SoundType.CannonReset, 0.7f);
 
             while (elapsedTime < 1f)
             {
