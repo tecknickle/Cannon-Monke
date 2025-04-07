@@ -10,6 +10,11 @@ namespace CannonMonke
         [Header("References")]
         [SerializeField, Self] CannonLoadingHandler loadingHandler;
         [SerializeField, Self] CinemachineImpulseSource impulseSource;
+        [SerializeField, Anywhere] Transform cannonCameraTarget;
+
+        [Header("SO Events")]
+        [SerializeField, Anywhere] FloatEventSO onCannonFired;
+        [SerializeField, Anywhere] VoidEventSO onCannonDryFire;
 
         [Header("Cannon Firing Settings")]
         [SerializeField] float cannonFiringForce = 30f;
@@ -18,17 +23,14 @@ namespace CannonMonke
 
         const float Zerof = 0f;
 
-        public static event Action<float> OnFireCannon;
-        public static event Action OnDryFireCannon;
-
         void OnEnable()
         {
-            PlayerController.OnPlayerSwitchCameraRequested += SwitchCamera;// Subscribe to events if needed
+            PlayerController.OnPlayerCameraSwitch += SwitchCamera;
         }
 
         void OnDisable()
         {
-            PlayerController.OnPlayerSwitchCameraRequested -= SwitchCamera; // Unsubscribe from events
+            PlayerController.OnPlayerCameraSwitch -= SwitchCamera;
         }
 
         private void Awake()
@@ -40,7 +42,7 @@ namespace CannonMonke
         {
             if (loadingHandler.IsCannonLoaded)
             {
-                OnFireCannon?.Invoke(cannonFiringForce);
+                onCannonFired.Raise(cannonFiringForce);
                 loadingHandler.FireTheObject(cannonFiringForce);
                 CameraManager.Instance.SetTarget(activeProjectile);
                 impulseSource.GenerateImpulse();
@@ -48,7 +50,7 @@ namespace CannonMonke
             }
             else
             {
-                OnDryFireCannon?.Invoke();
+                onCannonDryFire.Raise();
                 CameraManager.Instance.ReturnToDefault();
                 SoundManager.PlaySound(SoundType.CannonDryFire, 1f);
                 Debug.Log("Cannon is not loaded, cannot fire.");
@@ -60,9 +62,15 @@ namespace CannonMonke
             activeProjectile = projectile;
         }
 
-        void SwitchCamera()
+        void SwitchCamera(bool isInCannonMode)
         {
-            if (activeProjectile != null)
+            if (activeProjectile != null && isInCannonMode)
+            {
+                CameraManager.Instance.ToggleBetweenCannonAndProjectile(
+                    cannonCameraTarget, // Reference must be set in editor for now
+                    activeProjectile);
+            }
+            else if (activeProjectile != null && !isInCannonMode)
             {
                 CameraManager.Instance.ToggleBetweenDefaultAnd(activeProjectile);
             }

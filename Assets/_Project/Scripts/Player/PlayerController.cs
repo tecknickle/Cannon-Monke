@@ -18,6 +18,9 @@ namespace CannonMonke
         [SerializeField, Anywhere] CinemachineCamera cinemachineCamera;
         [SerializeField, Anywhere] InputReader inputReader;
 
+        [Header("SO Events")]
+        [SerializeField, Anywhere] VoidEventSO onPlayerSwitchCamera;
+
         [Header("Movement Settings")]
         [SerializeField] float moveSpeed = 300f;
         [SerializeField] float rotationSpeed = 600f;
@@ -41,7 +44,7 @@ namespace CannonMonke
         [SerializeField] float pushCooldown = 0.3f;
 
         [Header("Cannon Mode Settings")]
-        [SerializeField] float cannonFireCooldown = 1f;
+        [SerializeField] float cannonFireCooldown = 2f;
         [SerializeField] float cameraSwitchCooldown = 1f;
 
         [Header("Other Settings")]
@@ -83,7 +86,7 @@ namespace CannonMonke
 
         StateMachine stateMachine;
 
-        public static event Action OnPlayerSwitchCameraRequested;
+        public static event Action<bool> OnPlayerCameraSwitch;
 
         // Animator parameters
         static readonly int Speed = Animator.StringToHash("Speed");
@@ -162,7 +165,9 @@ namespace CannonMonke
             // Active projectile transform lives in Cannon Firing Handler
             cameraSwitchTimer.OnTimerStart += () =>
             {
-                OnPlayerSwitchCameraRequested?.Invoke();
+                // If in cannon mode, camera will toggle between projectile/cannon
+                // If not in cannon mode, toggle between projectile/player
+                OnPlayerCameraSwitch?.Invoke(IsInCannonMode);
             };
         }
         
@@ -276,7 +281,9 @@ namespace CannonMonke
 
         void OnSwitchCamera(bool performed)
         {
-            if (performed && !cameraSwitchTimer.IsRunning)
+            if (performed 
+                && !cameraSwitchTimer.IsRunning
+                && !cannonFireTimer.IsRunning)
             {
                 cameraSwitchTimer.Start();
             }

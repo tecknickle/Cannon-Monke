@@ -917,6 +917,7 @@ MonoBehaviour:
   objectHolding: {fileID: 289403752}
   cinemachineCamera: {fileID: 563396145}
   inputReader: {fileID: 11400000, guid: 6e2efdd08a8417e41a2bc5d7459d2a1e, type: 2}
+  onPlayerSwitchCamera: {fileID: 11400000, guid: 2f4d4478b93dd9b49a1878d9b2e07283, type: 2}
   moveSpeed: 300
   rotationSpeed: 600
   smoothTime: 0.2
@@ -932,6 +933,7 @@ MonoBehaviour:
   pushDistance: 2
   pushCooldown: 0.3
   cannonFireCooldown: 1
+  cameraSwitchCooldown: 1
   interactDuration: 3
   interactCooldown: 0.5
   emoteDuration: 8
@@ -1066,7 +1068,11 @@ MonoBehaviour:
   aimingHandler: {fileID: 302374461}
   impulseSource: {fileID: 302374459}
   cannonCameraTarget: {fileID: 542138176}
+  onCannonFired: {fileID: 11400000, guid: dd3b1ddf1f3b6484c987eabaabda77ef, type: 2}
+  onCannonDryFire: {fileID: 11400000, guid: 2e11c226c611e6846a38a991dba6daba, type: 2}
   positionOffset: {x: 0, y: -2, z: -6}
+  exitDelay: 1
+  cannonResetDelay: 1
 --- !u!136 &302374455
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1102,8 +1108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75b08000ccb105f49a8b34fc4fec66c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firingHandler: {fileID: 302374462}
   loadedPosition: {fileID: 303741198}
-  loadedObjectTransform: {fileID: 0}
+  onCannonFired: {fileID: 11400000, guid: dd3b1ddf1f3b6484c987eabaabda77ef, type: 2}
   IsCannonLoaded: 0
 --- !u!114 &302374459
 MonoBehaviour:
@@ -1179,8 +1186,6 @@ MonoBehaviour:
   lowerLimitInDegrees: 60
   leftLimitInDegrees: -45
   rightLimitInDegrees: 45
-  yAxisRotation: 0
-  xAxisRotation: 0
 --- !u!114 &302374462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1195,7 +1200,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingHandler: {fileID: 302374457}
   impulseSource: {fileID: 302374459}
-  cannonFiringForce: 30
+  cannonCameraTarget: {fileID: 542138176}
+  onCannonFired: {fileID: 11400000, guid: dd3b1ddf1f3b6484c987eabaabda77ef, type: 2}
+  onCannonDryFire: {fileID: 11400000, guid: 2e11c226c611e6846a38a991dba6daba, type: 2}
+  cannonFiringForce: 50
+--- !u!114 &302374463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302374452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24396c5e950348e45a262602eb31fd61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPosition: {fileID: 542138176}
+  onCannonFired: {fileID: 11400000, guid: dd3b1ddf1f3b6484c987eabaabda77ef, type: 2}
+  vfxPrefab: {fileID: 725748389856807714, guid: 8491d8b291194354881660e92d71ed14, type: 3}
+  vfxScaleFactor: 10
+  vfxLifetime: 2
 --- !u!1001 &303741196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1313,6 +1338,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 302374457}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 302374463}
     - targetCorrespondingSourceObject: {fileID: -3133498875991405556, guid: e5610460b13c49642b3ed614a4e4745d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1079740804}
@@ -1545,8 +1573,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22975299, y: 0.0000000507589, z: -0.000000011982553, w: 0.973249}
-  m_LocalPosition: {x: 0.5935116, y: 7.7461033, z: -8.3873205}
+  m_LocalRotation: {x: 0.16906807, y: -0.000000012120431, z: 0.000000002079108, w: 0.9856044}
+  m_LocalPosition: {x: 0.5935116, y: 6.7461033, z: -9.3873205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2124,8 +2152,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563396139}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.22975296, y: 0.000000050758892, z: -0.00000001198255, w: 0.973249}
-  m_LocalPosition: {x: 0.5935116, y: 7.7461033, z: -8.3873205}
+  m_LocalRotation: {x: 0.16906807, y: -0.000000012120433, z: 0.0000000020791207, w: 0.9856044}
+  m_LocalPosition: {x: 0.5935116, y: 6.7461033, z: -9.3873205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2218,7 +2246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Composition:
-    ScreenPosition: {x: 0, y: 0}
+    ScreenPosition: {x: 0, y: 0.2}
     DeadZone:
       Enabled: 0
       Size: {x: 0.2, y: 0.2}
@@ -2227,7 +2255,7 @@ MonoBehaviour:
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 3, z: 0}
+  TargetOffset: {x: 0, y: 0, z: 0}
   Damping: {x: 0.5, y: 0.5}
   Lookahead:
     Enabled: 0
@@ -2258,14 +2286,14 @@ MonoBehaviour:
   Orbits:
     Top:
       Radius: 12
-      Height: 10
+      Height: 9
     Center:
-      Radius: 10
-      Height: 8
+      Radius: 11
+      Height: 7
     Bottom:
-      Radius: 6
+      Radius: 10
       Height: 5
-    SplineCurvature: 0.5
+    SplineCurvature: 0
   RecenteringTarget: 2
   HorizontalAxis:
     Value: 0

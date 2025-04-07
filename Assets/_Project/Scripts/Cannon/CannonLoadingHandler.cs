@@ -9,6 +9,9 @@ namespace CannonMonke
         [SerializeField, Self] CannonFiringHandler firingHandler;
         [SerializeField, Anywhere] Transform loadedPosition;
 
+        [Header("SO Events")]
+        [SerializeField, Anywhere] FloatEventSO onCannonFired;
+
         IShootable objectToFire;
         Transform loadedObjectTransform;
         Transform lastFiredObject;
@@ -17,12 +20,12 @@ namespace CannonMonke
         void OnEnable()
         {
             Shootable.OnHitCannonLoadingZone += HandleOnHitCannonLoadingZone;
-            CannonFiringHandler.OnFireCannon += FireTheObject;
+            onCannonFired.RegisterListener(FireTheObject);
         }
         void OnDisable()
         {
             Shootable.OnHitCannonLoadingZone -= HandleOnHitCannonLoadingZone;
-            CannonFiringHandler.OnFireCannon -= FireTheObject;
+            onCannonFired.UnregisterListener(FireTheObject);
         }
 
         void Awake()

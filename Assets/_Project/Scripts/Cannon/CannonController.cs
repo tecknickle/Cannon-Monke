@@ -17,8 +17,14 @@ namespace CannonMonke
         [SerializeField, Self] CinemachineImpulseSource impulseSource;
         [SerializeField, Anywhere] Transform cannonCameraTarget;
 
+        [Header("SO Events")]
+        [SerializeField, Anywhere] FloatEventSO onCannonFired;
+        [SerializeField, Anywhere] VoidEventSO onCannonDryFire;
+
         [Header("Settings")]
         [SerializeField] Vector3 positionOffset = new(0f, -2f, -6f);
+        [SerializeField] float exitDelay = 1f;
+        [SerializeField] float cannonResetDelay = 1f;
 
         PlayerController currentPlayer;
 
@@ -26,14 +32,14 @@ namespace CannonMonke
 
         void OnEnable()
         {
-            CannonFiringHandler.OnFireCannon += ExitCannonAfterDelay;
-            CannonFiringHandler.OnDryFireCannon += ExitCannonMode;
+            onCannonFired.RegisterListener(ExitCannonAfterDelay);
+            onCannonDryFire.RegisterListener(ExitCannonMode);
         }
 
         void OnDisable()
         {
-            CannonFiringHandler.OnFireCannon -= ExitCannonAfterDelay;
-            CannonFiringHandler.OnDryFireCannon -= ExitCannonMode;
+            onCannonFired.UnregisterListener(ExitCannonAfterDelay);
+            onCannonDryFire.UnregisterListener(ExitCannonMode);
         }
 
         void Awake()
@@ -50,7 +56,11 @@ namespace CannonMonke
         {
             if (interactor.TryGetComponent(out PlayerController player))
             {
-                if (currentPlayer == player) ExitCannonMode();
+                if (currentPlayer == player)
+                {
+                    ExitCannonMode();
+                    CameraManager.Instance.ReturnToDefault();
+                }
                 else
                 {
                     currentPlayer = player;
@@ -79,12 +89,12 @@ namespace CannonMonke
             currentPlayer.PlayerCannonMode(false, null);
             currentPlayer = null;
             aimingHandler.ResetCannonPosition();
-            StartCoroutine(aimingHandler.ResetCannonRotationAfterDelay(1f));
+            StartCoroutine(aimingHandler.ResetCannonRotationAfterDelay(cannonResetDelay));
         }
 
         void ExitCannonAfterDelay(float _)
         {
-            StartCoroutine(ExitCannonModeAfterDelay(1f));
+            StartCoroutine(ExitCannonModeAfterDelay(exitDelay));
         }
 
         IEnumerator ExitCannonModeAfterDelay(float delay)

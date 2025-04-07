@@ -12,6 +12,7 @@ TagManager:
   - Racoon
   - Cannon
   - CannonLoadingZone
+  - CameraTrackingTarget
   layers:
   - Default
   - TransparentFX

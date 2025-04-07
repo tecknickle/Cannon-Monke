@@ -107,5 +107,22 @@ namespace CannonMonke
                 ReturnToDefault();
             }
         }
+
+        public void ToggleBetweenCannonAndProjectile(Transform cannon, Transform projectile)
+        {
+            if (currentTarget == cannon)
+            {
+                SetTarget(projectile);
+            }
+            else if (currentTarget == projectile)
+            {
+                SetTarget(cannon);
+            }
+            else
+            {
+                // Default to cannon if neither is the current target
+                SetTarget(cannon);
+            }
+        }
     }
 }
