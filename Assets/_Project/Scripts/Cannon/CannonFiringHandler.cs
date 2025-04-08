@@ -17,6 +17,9 @@ namespace CannonMonke
 
         [Header("Cannon Firing Settings")]
         [SerializeField] float cannonFiringForce = 30f;
+        [SerializeField] float shockwaveForce = 10f;
+        [SerializeField] float shockwaveRadius = 20f;
+        [SerializeField] float shockwaveUpwardsModifier = 5f;
 
         Transform activeProjectile;
 
@@ -45,6 +48,7 @@ namespace CannonMonke
                 loadingHandler.FireTheObject(cannonFiringForce);
                 CameraManager.Instance.SetTarget(activeProjectile);
                 impulseSource.GenerateImpulse();
+                AddCannonBackBlastForce();
                 SoundManager.PlaySound(SoundType.CannonFire, 1f);
             }
             else
@@ -77,6 +81,26 @@ namespace CannonMonke
             {
                 Debug.Log("No active projectile yet.");
                 return;
+            }
+        }
+
+        void AddCannonBackBlastForce()
+        {
+            Collider[] colliders = Physics.OverlapSphere(
+                transform.position, shockwaveRadius);
+
+            foreach (var collider in colliders)
+            {
+                Rigidbody rb = collider.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.AddExplosionForce(
+                        shockwaveForce, 
+                        transform.position, 
+                        shockwaveRadius,
+                        shockwaveUpwardsModifier,
+                        ForceMode.Impulse);
+                }
             }
         }
     }
