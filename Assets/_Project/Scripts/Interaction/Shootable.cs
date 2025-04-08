@@ -48,9 +48,9 @@ namespace CannonMonke
             ignoreCollisionTimer.OnTimerStop += () => objectCollider.enabled = true;
         }
 
-        void OnCollisionEnter(Collision other)
+        void OnTriggerEnter(UnityEngine.Collider other)
         {
-            if (other.collider.CompareTag("CannonLoadingZone"))
+            if (other.CompareTag("CannonLoadingZone"))
             {
                 Debug.Log("Object hit LZ: " + this.name);
                 OnHitCannonLoadingZone?.Invoke(this, this.transform);

@@ -24,6 +24,7 @@ namespace CannonMonke
         [SerializeField] float cannonResetDelay = 1f;
 
         PlayerController currentPlayer;
+        Coroutine exitCannonModeCoroutine = null;
 
         const float Zerof = 0f;
 
@@ -68,6 +69,11 @@ namespace CannonMonke
 
         public void EnterCannonMode(InputReader input)
         {
+            if (exitCannonModeCoroutine != null)
+            {
+                StopCoroutine(exitCannonModeCoroutine);
+                exitCannonModeCoroutine = null;
+            }
             if (currentPlayer != null)
             {
                 currentPlayer.transform.SetPositionAndRotation(
@@ -85,8 +91,11 @@ namespace CannonMonke
             if (aimingHandler != null) aimingHandler.SetInputReader(null);
             currentPlayer.PlayerCannonMode(false, null);
             currentPlayer = null;
-            aimingHandler.ResetCannonPosition();
-            StartCoroutine(aimingHandler.ResetCannonRotationAfterDelay(cannonResetDelay));
+            aimingHandler.ResetCannonAimedAxis();
+            exitCannonModeCoroutine = 
+                StartCoroutine(
+                    aimingHandler.ResetCannonRotationAfterDelay(cannonResetDelay)
+                    );
         }
 
         void ExitCannonAfterDelay(float _)
@@ -97,8 +106,9 @@ namespace CannonMonke
         IEnumerator ExitCannonModeAfterDelay(float delay)
         {
             // Cannon was fired, so lock cannon after firing by clearing input
-            aimingHandler.SetInputReader(null);
+            
             yield return new WaitForSeconds(delay);
+            aimingHandler.SetInputReader(null);
             ExitCannonMode();
         }
     }

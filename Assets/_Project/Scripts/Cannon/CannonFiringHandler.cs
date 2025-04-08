@@ -8,6 +8,7 @@ namespace CannonMonke
     {
         [Header("References")]
         [SerializeField, Self] CannonLoadingHandler loadingHandler;
+        [SerializeField, Self] OrdinanceHandler ordinanceHandler;
         [SerializeField, Self] CinemachineImpulseSource impulseSource;
         [SerializeField, Anywhere] Transform cannonCameraTarget;
 
@@ -46,9 +47,10 @@ namespace CannonMonke
             {
                 onCannonFiredChannel.Raise(cannonFiringForce);
                 loadingHandler.FireTheObject(cannonFiringForce);
-                CameraManager.Instance.SetTarget(activeProjectile);
+                CameraManager.Instance.ReturnToDefault();
                 impulseSource.GenerateImpulse();
-                AddCannonBackBlastForce();
+                AddCannonShockwaveForce();
+                ordinanceHandler.GiveProjectileOrdinance(activeProjectile);
                 SoundManager.PlaySound(SoundType.CannonFire, 1f);
             }
             else
@@ -84,7 +86,7 @@ namespace CannonMonke
             }
         }
 
-        void AddCannonBackBlastForce()
+        void AddCannonShockwaveForce()
         {
             Collider[] colliders = Physics.OverlapSphere(
                 transform.position, shockwaveRadius);

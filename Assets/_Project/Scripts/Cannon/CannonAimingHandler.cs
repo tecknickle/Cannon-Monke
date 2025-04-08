@@ -67,13 +67,13 @@ namespace CannonMonke
             yAxisRotation = Mathf.Clamp(
                 yAxisRotation,
                 leftLimitInDegrees,
-                rightLimitInDegrees); // Clamp horizontal rotation
+                rightLimitInDegrees);
 
             xAxisRotation += xAxisRotationInput;
             xAxisRotation = Mathf.Clamp(
                 xAxisRotation,
                 upperLimitInDegrees,
-                lowerLimitInDegrees); // Clamp vertical rotation
+                lowerLimitInDegrees);
 
             cannonBarrel.transform.localRotation = Quaternion.Slerp(
                 cannonBarrel.transform.localRotation,
@@ -82,7 +82,7 @@ namespace CannonMonke
 
             cannonBase.transform.localRotation = Quaternion.Slerp(
                 cannonBase.transform.localRotation,
-                Quaternion.Euler(Zerof, yAxisRotation, Zerof), // Only rotate the base horizontally
+                Quaternion.Euler(Zerof, yAxisRotation, Zerof),
                 interpolationSpeed * Time.deltaTime);
         }
 
@@ -101,12 +101,12 @@ namespace CannonMonke
             {
                 cannonBarrel.transform.localRotation = Quaternion.Slerp(
                     barrelStartRotation,
-                    Quaternion.identity, // Reset to default rotation
+                    Quaternion.identity,
                     elapsedTime);
 
                 cannonBase.transform.localRotation = Quaternion.Slerp(
                     baseStartRotation,
-                    Quaternion.identity, // Reset to default rotation
+                    Quaternion.identity,
                     elapsedTime);
 
                 elapsedTime += Time.deltaTime;
@@ -114,13 +114,12 @@ namespace CannonMonke
             }
             cannonBarrel.transform.localRotation = Quaternion.identity;
             cannonBase.transform.localRotation = Quaternion.identity;
-            // Ensure final rotation is set to identity
         }
 
-        public void ResetCannonPosition()
+        public void ResetCannonAimedAxis()
         {
-            xAxisRotation = Zerof; // Reset x-axis rotation
-            yAxisRotation = Zerof; // Reset y-axis rotation
+            xAxisRotation = Zerof;
+            yAxisRotation = Zerof;
         }
     }
 }
