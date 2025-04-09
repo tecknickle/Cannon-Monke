@@ -1,15 +1,14 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using Utilities;
 
 namespace CannonMonke
 {
-    public class CollectibleSpawnManager : EntitySpawnManager
+    public class HoldableSpawnManager : EntitySpawnManager
     {
-        [SerializeField] CollectibleData[] collectibleData;
-        [SerializeField] float spawnInterval = 1f;
+        [SerializeField] HoldableData[] holdableObjectData;
+        [SerializeField] float spawnInterval = 0f;
 
-        EntitySpawner<Collectible> spawner;
+        EntitySpawner<Holdable> spawner;
 
         CountdownTimer spawnTimer;
         int counter;
@@ -18,8 +17,8 @@ namespace CannonMonke
         {
             base.Awake();
 
-            spawner = new EntitySpawner<Collectible>(
-                new EntityFactory<Collectible>(collectibleData),
+            spawner = new EntitySpawner<Holdable>(
+                new EntityFactory<Holdable>(holdableObjectData),
                 spawnPointStrategy);
 
             spawnTimer = new CountdownTimer(spawnInterval);

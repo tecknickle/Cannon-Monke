@@ -10,7 +10,7 @@ namespace CannonMonke
 
         const float DefaultDropForce = 1f;
 
-        IHoldable heldObject;
+        Holdable heldObject;
         public bool IsHolding;
 
         void Awake()
@@ -18,7 +18,7 @@ namespace CannonMonke
             IsHolding = false;
         }
 
-        public void PickUpObject(IHoldable objectToHold)
+        public void PickUpObject(Holdable objectToHold)
         {
             // If not holding anything, pick up object
             if (heldObject != null)

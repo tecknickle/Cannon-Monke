@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CannonMonke
 {
-    public class ExplosiveComponent : MonoBehaviour
+    public class ExplosiveOrdinance : MonoBehaviour
     {
         [Header("References")]
 

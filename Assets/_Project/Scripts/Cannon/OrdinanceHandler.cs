@@ -8,13 +8,13 @@ namespace CannonMonke
     {
         public void GiveProjectileOrdinance(Transform projectile)
         {
-            if (projectile.TryGetComponent(out ExplosiveComponent explosive))
+            if (projectile.TryGetComponent(out ExplosiveOrdinance explosive))
             {
                 explosive.EnableExplosive();
             }
             else
             {
-                projectile.AddComponent<ExplosiveComponent>().EnableExplosive();
+                projectile.AddComponent<ExplosiveOrdinance>().EnableExplosive();
             }
         } 
     }

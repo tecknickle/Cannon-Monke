@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29b76a0d679c99b4d97326a78ab86ff9, type: 3}
-  m_Name: BananaBundle
+  m_Name: CrateGeneric
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1927405113991422038, guid: 22ee8cb2ab5efd4489e5ed193fa6c2ea, type: 3}
-  mass: 1
+  prefab: {fileID: 8401143068176870392, guid: 6c589be51287c2d43aedfd6372865353, type: 3}
+  mass: 5
   softImpactSound: {fileID: 0}
   hardImpactSound: {fileID: 0}
   defaultImpactVFX: {fileID: 0}

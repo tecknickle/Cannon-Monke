@@ -14,9 +14,6 @@ namespace CannonMonke
         [SerializeField] float minRandomSpin = 1f;
         [SerializeField] float maxRandomSpin = 7f;
 
-        // Transform is used for camera tracking active projectile in Cannon Controller
-        public static event Action<Shootable, Transform> OnHitCannonLoadingZone;
-
         Transform currentCannonLoadPosition;
         Rigidbody rb;
         Collider objectCollider;
@@ -46,15 +43,6 @@ namespace CannonMonke
 
             ignoreCollisionTimer.OnTimerStart += () => objectCollider.enabled = false;
             ignoreCollisionTimer.OnTimerStop += () => objectCollider.enabled = true;
-        }
-
-        void OnTriggerEnter(UnityEngine.Collider other)
-        {
-            if (other.CompareTag("CannonLoadingZone"))
-            {
-                Debug.Log("Object hit LZ: " + this.name);
-                OnHitCannonLoadingZone?.Invoke(this, this.transform);
-            }
         }
 
         public void GetIntoCannon(Transform designatedLoadedPosition)

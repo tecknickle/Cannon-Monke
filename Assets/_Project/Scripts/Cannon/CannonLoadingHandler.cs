@@ -1,5 +1,5 @@
 ﻿using KBCore.Refs;
-using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CannonMonke
@@ -13,19 +13,19 @@ namespace CannonMonke
         [Header("SO Events")]
         [SerializeField, Anywhere] FloatEventSO onCannonFiredChannel;
 
-        IShootable objectToFire;
+        Shootable objectToFire;
         Transform loadedObjectTransform;
         Transform lastFiredObject;
         public bool IsCannonLoaded;
 
         void OnEnable()
         {
-            Shootable.OnHitCannonLoadingZone += HandleOnHitCannonLoadingZone;
+            CannonLoadingZone.OnHitCannonLoadingZone += HandleOnHitCannonLoadingZone;
             onCannonFiredChannel.RegisterListener(FireTheObject);
         }
         void OnDisable()
         {
-            Shootable.OnHitCannonLoadingZone -= HandleOnHitCannonLoadingZone;
+            CannonLoadingZone.OnHitCannonLoadingZone -= HandleOnHitCannonLoadingZone;
             onCannonFiredChannel.UnregisterListener(FireTheObject);
         }
 
@@ -37,19 +37,20 @@ namespace CannonMonke
             lastFiredObject = null;
         }
 
-        void HandleOnHitCannonLoadingZone(Shootable newShootable, Transform newObject)
+        void HandleOnHitCannonLoadingZone(Transform newObject)
         {
-            if (newShootable == null) return;
-            if (!IsCannonLoaded) LoadTheCannon(newShootable, newObject);
+            if (newObject == null || IsCannonLoaded) return;
+            objectToFire = newObject.AddComponent<Shootable>();
+            if (!IsCannonLoaded) LoadTheCannon(newObject);
             else
             {
                 Debug.Log("Cannon already loaded, ignoring additional hit.");
             }
         }
 
-        void LoadTheCannon(IShootable objectToLoad, Transform objectTransform)
+        void LoadTheCannon(Transform objectTransform)
         {
-            if (objectToFire != null)
+            if (IsCannonLoaded)
             {
                 Debug.Log("Cannon is already loaded.");
                 return;
@@ -57,7 +58,6 @@ namespace CannonMonke
             else
             {
                 Debug.Log("Trying to load cannon");
-                objectToFire = objectToLoad;
                 objectToFire.GetIntoCannon(loadedPosition);
 
                 IsCannonLoaded = true;

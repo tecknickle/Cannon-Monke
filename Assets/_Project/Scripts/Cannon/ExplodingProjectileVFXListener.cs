@@ -15,12 +15,12 @@ namespace CannonMonke
 
         void OnEnable()
         {
-            ExplosiveComponent.OnExploded += HandleExplosion;
+            ExplosiveOrdinance.OnExploded += HandleExplosion;
         }
 
         void OnDisable()
         {
-            ExplosiveComponent.OnExploded -= HandleExplosion;
+            ExplosiveOrdinance.OnExploded -= HandleExplosion;
         }
 
         void HandleExplosion(Transform location)

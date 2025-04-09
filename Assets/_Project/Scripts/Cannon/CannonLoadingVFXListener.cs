@@ -15,15 +15,15 @@ namespace CannonMonke
 
         void OnEnable()
         {
-            Shootable.OnHitCannonLoadingZone += DoLoadingVFX;
+            CannonLoadingZone.OnHitCannonLoadingZone += DoLoadingVFX;
         }
 
         void OnDisable()
         {
-            Shootable.OnHitCannonLoadingZone -= DoLoadingVFX;
+            CannonLoadingZone.OnHitCannonLoadingZone -= DoLoadingVFX;
         }
 
-        private void DoLoadingVFX(Shootable _, Transform ojectTransform)
+        private void DoLoadingVFX(Transform ojectTransform)
         {
             if (loadingPrefab != null)
             {

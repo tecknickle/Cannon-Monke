@@ -1,15 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace CannonMonke
 {
-    public class Holdable : MonoBehaviour, IInteractable, IHoldable
+    public class Holdable : Entity, IInteractable, IHoldable
     {
         Transform holder;
         Rigidbody rb;
+        Collider objectCollider;
 
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            objectCollider = GetComponent<Collider>();
         }
 
         void FixedUpdate()
@@ -36,12 +39,15 @@ namespace CannonMonke
             // Sets player as holder of this object
             holder = newHolder;
             // Prevents physics from affecting object while held
+            objectCollider.enabled = false;
             rb.isKinematic = true;
+            
         }
 
         public void Drop()
         {
             holder = null;
+            objectCollider.enabled = true;
             rb.isKinematic = false;
         }
 

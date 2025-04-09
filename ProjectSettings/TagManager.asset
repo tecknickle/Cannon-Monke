@@ -6,13 +6,12 @@ TagManager:
   tags:
   - Ground
   - Moving Platform
-  - Crate
-  - Collectible
-  - Banana
   - Racoon
   - Cannon
   - CannonLoadingZone
   - CameraTrackingTarget
+  - FxTemporaire
+  - Holdable
   layers:
   - Default
   - TransparentFX
