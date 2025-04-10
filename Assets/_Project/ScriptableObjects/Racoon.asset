@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29b76a0d679c99b4d97326a78ab86ff9, type: 3}
-  m_Name: BananaSingle
+  m_Name: Racoon
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2956321721367007197, guid: efe1da78ee42de24db61718ac3643366, type: 3}
-  onFiredReaction: {fileID: 0}
-  onProjectileHitReaction: {fileID: 11400000, guid: c7b15604d854a68458831b1ea65d359d, type: 2}
+  prefab: {fileID: 7785452866898878158, guid: b014ec7d8e593bf4b94620636a64fd51, type: 3}
+  onFiredReaction: {fileID: 11400000, guid: 5ce7f4a545fff0147893a036fa4db722, type: 2}
+  onProjectileHitReaction: {fileID: 11400000, guid: e6579cb86fe37044e884e40c6dd136f4, type: 2}
   mass: 1
   launchVelocityMultiplier: 1

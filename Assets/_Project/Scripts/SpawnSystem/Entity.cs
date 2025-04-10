@@ -4,6 +4,6 @@ namespace CannonMonke
 {
     public abstract class Entity : MonoBehaviour 
     {
-
+        
     }
 }

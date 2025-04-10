@@ -46,18 +46,21 @@ namespace CannonMonke
             if (loadingHandler.IsCannonLoaded)
             {
                 onCannonFiredChannel.Raise(cannonFiringForce);
+
                 loadingHandler.FireTheObject(cannonFiringForce);
                 CameraManager.Instance.ReturnToDefault();
+
                 impulseSource.GenerateImpulse();
                 AddCannonShockwaveForce();
-                ordinanceHandler.GiveProjectileOrdinance(activeProjectile);
-                SoundManager.PlaySound(SoundType.CannonFire, 1f);
+
+                ordinanceHandler.HandleNewOrdinance(activeProjectile);
+                SoundManager.PlaySound(SoundType.CannonFire);
             }
             else
             {
                 onCannonDryFire.Raise();
                 CameraManager.Instance.ReturnToDefault();
-                SoundManager.PlaySound(SoundType.CannonDryFire, 1f);
+                SoundManager.PlaySound(SoundType.CannonDryFire);
                 Debug.Log("Cannon is not loaded, cannot fire.");
             }
         }

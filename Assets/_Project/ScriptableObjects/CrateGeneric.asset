@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: CrateGeneric
   m_EditorClassIdentifier: 
   prefab: {fileID: 8401143068176870392, guid: 6c589be51287c2d43aedfd6372865353, type: 3}
+  onFiredReaction: {fileID: 11400000, guid: 994d493c4166cf644bad0cb34b713098, type: 2}
+  onProjectileHitReaction: {fileID: 11400000, guid: 0ad8229480692674c8a58c0563c560db, type: 2}
   mass: 5
-  softImpactSound: {fileID: 0}
-  hardImpactSound: {fileID: 0}
-  defaultImpactVFX: {fileID: 0}
-  prefabVFX: {fileID: 0}
   launchVelocityMultiplier: 1

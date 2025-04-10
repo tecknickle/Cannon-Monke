@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: BananaBundle
   m_EditorClassIdentifier: 
   prefab: {fileID: 1927405113991422038, guid: 22ee8cb2ab5efd4489e5ed193fa6c2ea, type: 3}
+  onFiredReaction: {fileID: 0}
+  onProjectileHitReaction: {fileID: 11400000, guid: c7b15604d854a68458831b1ea65d359d, type: 2}
   mass: 1
-  softImpactSound: {fileID: 0}
-  hardImpactSound: {fileID: 0}
-  defaultImpactVFX: {fileID: 0}
-  prefabVFX: {fileID: 0}
   launchVelocityMultiplier: 1

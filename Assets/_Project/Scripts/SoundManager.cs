@@ -14,7 +14,11 @@ namespace CannonMonke
         CannonFire,
         CannonLoad,
         CannonReset,
-        CannonDryFire
+        CannonDryFire,
+        ExplosiveOrdinance,
+        SplatterOrdinance,
+        CrateGenericOrdinance,
+        RacoonOrdinance
         // Add more sound types as needed
     }
 
@@ -37,7 +41,7 @@ namespace CannonMonke
         }
 
         
-        public static void PlaySound(SoundType sound, float volume = 1)
+        public static void PlaySound(SoundType sound, float volume = 0.5f)
         {
             AudioClip[] clips = instance.soundList[(int)sound].Sounds;
             AudioClip randomClip = clips[UnityEngine.Random.Range(0, clips.Length)];

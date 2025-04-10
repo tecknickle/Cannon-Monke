@@ -5,39 +5,33 @@ using UnityEngine;
 
 namespace CannonMonke
 {
-    public class ExplosiveOrdinance : MonoBehaviour
+    public class ExplosiveOrdinance : MonoBehaviour, IOrdinance
     {
-        [Header("References")]
-
         [Header("Explosion Settings")]
         [SerializeField] float explosionForce = 20f;
         [SerializeField] float explosionRadius = 50f;
         [SerializeField] float explosionUpwardsModifier = 20f;
 
-        bool hasExploded;
-
         public static event Action<Transform> OnExploded;
 
         void Awake()
         {
-            hasExploded = false;
+            enabled = false;
         }
 
-        public void EnableExplosive()
+        public void EnableOrdinance()
         {
-            hasExploded = false;
             enabled = true;
         }
 
-        void OnCollisionEnter(Collision collision)
+        public void OnCollisionEnter(Collision collision)
         {
-            if (hasExploded) return;
-            hasExploded = true;
-            Explode();
+            if (enabled == false) return;
+            OnHit();
             gameObject.SetActive(false);
         }
 
-        void Explode()
+        public void OnHit()
         {
             OnExploded?.Invoke(this.transform);
             Collider[] colliders = Physics.OverlapSphere(

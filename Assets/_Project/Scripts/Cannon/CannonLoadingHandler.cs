@@ -40,7 +40,9 @@ namespace CannonMonke
         void HandleOnHitCannonLoadingZone(Transform newObject)
         {
             if (newObject == null || IsCannonLoaded) return;
+
             objectToFire = newObject.AddComponent<Shootable>();
+
             if (!IsCannonLoaded) LoadTheCannon(newObject);
             else
             {
@@ -63,7 +65,7 @@ namespace CannonMonke
                 IsCannonLoaded = true;
                 loadedObjectTransform = objectTransform; // Used for camera tracking
 
-                SoundManager.PlaySound(SoundType.CannonLoad, 0.3f);
+                SoundManager.PlaySound(SoundType.CannonLoad);
             }
         }
 

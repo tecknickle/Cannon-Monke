@@ -18,6 +18,8 @@ namespace CannonMonke
         Rigidbody rb;
         Collider objectCollider;
 
+        bool hasHitAfterFired = false;
+
         CountdownTimer ignoreCollisionTimer;
 
         void Update()
@@ -93,6 +95,13 @@ namespace CannonMonke
             rb.AddForce(direction * force, ForceMode.Impulse);
             AddRandomSpin();
             Debug.Log("I am being launched: " + this.name);
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            if (hasHitAfterFired) return;
+            hasHitAfterFired = true;
+            gameObject.SetActive(false);
         }
 
         void AddRandomSpin()

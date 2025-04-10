@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace CannonMonke
 {
-    public class ExplodingProjectileVFXListener : MonoBehaviour
+    public class SplatterOrdinanceVFXListener : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] GameObject firingPrefab;
+        [SerializeField] GameObject splatterPrefab;
         [SerializeField] CinemachineImpulseSource impulseSource;
 
         [Header("VFX Settings")]
@@ -15,20 +15,20 @@ namespace CannonMonke
 
         void OnEnable()
         {
-            ExplosiveOrdinance.OnExploded += HandleExplosion;
+            SplatterOrdinance.OnSplatter += HandleSplatter;
         }
 
         void OnDisable()
         {
-            ExplosiveOrdinance.OnExploded -= HandleExplosion;
+            SplatterOrdinance.OnSplatter -= HandleSplatter;
         }
 
-        void HandleExplosion(Transform location)
+        void HandleSplatter(Transform location)
         {
-            if (firingPrefab != null)
+            if (splatterPrefab != null)
             {
                 GameObject vfxInstance1 = Instantiate(
-                    firingPrefab,
+                    splatterPrefab,
                     location.transform.position,
                     Quaternion.identity);
 
@@ -37,7 +37,7 @@ namespace CannonMonke
             }
             impulseSource.GenerateImpulse();
             // placeholder for future sound
-            SoundManager.PlaySound(SoundType.CannonFire, 1f);
+            SoundManager.PlaySound(SoundType.SplatterOrdinance, 0.5f);
         }
     }
 }
